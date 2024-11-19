@@ -1,7 +1,7 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
 
 public class Main {
 
@@ -56,6 +56,7 @@ public class Main {
 
         JTextField usernameField = new JTextField();
         usernameField.setBounds(50, 130, 250, 30);
+        usernameField.setBackground(Color.WHITE);
         rightPanel.add(usernameField);
 
         // Password label and password field
@@ -67,6 +68,28 @@ public class Main {
         JPasswordField passwordField = new JPasswordField();
         passwordField.setBounds(50, 200, 250, 30);
         rightPanel.add(passwordField);
+
+        ImageIcon openEyeIcon = new ImageIcon(Main.class.getResource("/resources/notvisible.png"));
+        ImageIcon closedEyeIcon = new ImageIcon(Main.class.getResource("/resources/visible-2.png"));
+
+        // Eye button to toggle password visibility
+        JButton toggleButton = new JButton(openEyeIcon); // You can use an image icon here
+        toggleButton.setBounds(310, 200, 30, 30);
+        toggleButton.setBorderPainted(false);
+        toggleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (passwordField.getEchoChar() != '\u0000') {
+                    passwordField.setEchoChar('\u0000'); // Show password
+                    toggleButton.setIcon(closedEyeIcon);
+                } else {
+                    passwordField.setEchoChar((Character) UIManager.get("PasswordField.echoChar")); // Hide password
+                    toggleButton.setIcon(openEyeIcon);
+                }
+            }
+        });
+        rightPanel.add(toggleButton);
+
 
         // Login button
         JButton loginButton = new JButton("LOG IN");
