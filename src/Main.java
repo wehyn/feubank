@@ -79,6 +79,11 @@ public class Main {
             public void actionPerformed(ActionEvent e) {
                 String username = usernameField.getText();
                 String password = new String(passwordField.getPassword());
+
+                if (authenticateUser(username, password)){
+                    System.out.println("Successfully Logged In");
+                }
+
             }
         });
         rightPanel.add(loginButton);
@@ -103,17 +108,21 @@ public class Main {
         frame.setVisible(true);
     }
 
-    private boolean authenticateUser(String username, String password) {
-        // Authenticate User in the Database
+    private static boolean authenticateUser(String username, String password) {
+        // Authenticate User in the
+        System.out.println(username);
+        System.out.println(password);
 
+        return false;
+
+
+    }
+
+    private static boolean transferMoney(String accountNumber, double amount){
         return false;
     }
 
-    private boolean transferMoney(String accountNumber, double amount){
-        return false;
-    }
-
-    private void getBalance(){
+    private static void getBalance(){
         return;
     }
 
