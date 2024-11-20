@@ -6,6 +6,13 @@ import javax.swing.*;
 public class Main {
 
     public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            Main mainApp = new Main();
+            mainApp.createLoginFrame();
+        });
+    }
+
+    public void createLoginFrame() {
         // Create the frame
         JFrame frame = new JFrame("FEU Online Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -73,7 +80,7 @@ public class Main {
         ImageIcon closedEyeIcon = new ImageIcon(Main.class.getResource("/resources/visible-2.png"));
 
         // Eye button to toggle password visibility
-        JButton toggleButton = new JButton(openEyeIcon); // You can use an image icon here
+        JButton toggleButton = new JButton(openEyeIcon);
         toggleButton.setBounds(310, 200, 30, 30);
         toggleButton.setBorderPainted(false);
         toggleButton.addActionListener(new ActionListener() {
@@ -90,7 +97,6 @@ public class Main {
         });
         rightPanel.add(toggleButton);
 
-
         // Login button
         JButton loginButton = new JButton("LOG IN");
         loginButton.setBounds(50, 250, 250, 40);
@@ -103,10 +109,13 @@ public class Main {
                 String username = usernameField.getText();
                 String password = new String(passwordField.getPassword());
 
-                if (authenticateUser(username, password)){
-                    System.out.println("Successfully Logged In");
+                if (authenticateUser(username, password)) {
+                    // Login successful, open home page
+                    frame.setVisible(false);  // Hide login frame
+                    createHomePage();        // Show home page
+                } else {
+                    System.out.println("Invalid credentials.");
                 }
-
             }
         });
         rightPanel.add(loginButton);
@@ -131,22 +140,39 @@ public class Main {
         frame.setVisible(true);
     }
 
-    private static boolean authenticateUser(String username, String password) {
-        // Authenticate User in the
-        System.out.println(username);
-        System.out.println(password);
-
-        return false;
-
-
+    private boolean authenticateUser(String username, String password) {
+        // Implement actual authentication logic here
+        System.out.println("Username: " + username);
+        System.out.println("Password: " + password);
+        // Dummy authentication (Always returns true for demonstration)
+        return "user".equals(username) && "password".equals(password);
     }
 
-    private static boolean transferMoney(String accountNumber, double amount){
-        return false;
-    }
+    private void createHomePage() {
+        JFrame homeFrame = new JFrame("FEU Home Page");
+        homeFrame.setSize(600, 400);
+        homeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    private static void getBalance(){
-        return;
-    }
+        JPanel homePanel = new JPanel();
+        homePanel.setLayout(null);
 
+        JLabel welcomeLabel = new JLabel("Welcome to FEU Online");
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        welcomeLabel.setBounds(150, 150, 300, 40);
+        homePanel.add(welcomeLabel);
+
+        JButton logoutButton = new JButton("LOG OUT");
+        logoutButton.setBounds(250, 200, 100, 40);
+        logoutButton.setBackground(Color.RED);
+        logoutButton.setForeground(Color.WHITE);
+        logoutButton.addActionListener(e -> {
+            // Log out and return to login page
+            homeFrame.setVisible(false);
+            createLoginFrame(); // Go back to login screen
+        });
+        homePanel.add(logoutButton);
+
+        homeFrame.add(homePanel);
+        homeFrame.setVisible(true);
+    }
 }
