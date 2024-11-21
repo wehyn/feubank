@@ -1,11 +1,13 @@
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
+
 
 public class Main {
 
     public static void main(String[] args) {
+
         SwingUtilities.invokeLater(() -> {
             Main mainApp = new Main();
             mainApp.createLoginFrame();
@@ -132,12 +134,75 @@ public class Main {
         enrollNowLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         enrollNowLabel.setForeground(Color.GRAY);
         enrollNowLabel.setBounds(50, 320, 200, 20);
+
+        enrollNowLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                frame.setVisible(false);  // Hide login frame
+                createRegisterPage();
+            }
+        });
         rightPanel.add(enrollNowLabel);
 
         frame.add(rightPanel);
 
         // Set frame visible
         frame.setVisible(true);
+    }
+
+    public void createRegisterPage(){
+        JFrame registerFrame = new JFrame("FEU Register Page");
+        registerFrame.setSize(600, 400);
+        registerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel registerPanel = new JPanel();
+        registerPanel.setLayout(null);
+
+        JLabel registerLabel = new JLabel("Register to FEU Online");
+        registerLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        registerLabel.setBounds(150, 150, 300, 40);
+        registerPanel.add(registerLabel);
+
+        JButton registerButton = new JButton("REGISTER");
+        registerButton.setBounds(250, 200, 100, 40);
+        registerButton.setFont(new Font("Arial", Font.BOLD, 14));
+        registerButton.setBackground(Color.RED);
+        registerButton.setForeground(Color.WHITE);
+        registerButton.addActionListener(e -> {
+
+            JFrame successFrame = new JFrame("Registration Successful");
+            successFrame.setSize(400, 200);
+            successFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            
+            JPanel successPanel = new JPanel();
+            successPanel.setLayout(null);
+            successPanel.setBackground(Color.decode("#C4FFA9"));
+
+            JLabel successLabel = new JLabel("Registration Successful!");
+            successLabel.setFont(new Font("Arial", Font.BOLD, 24));
+            successLabel.setBounds(50, 50, 300, 40);
+            successPanel.add(successLabel);
+
+            JButton loginButton = new JButton("GO BACK TO LOGIN");
+            loginButton.setBounds(100, 100, 200, 40);
+            loginButton.setBackground(Color.BLACK);
+            loginButton.setForeground(Color.WHITE);
+            loginButton.setOpaque(true);
+            loginButton.setBorderPainted(false);            
+            loginButton.addActionListener(e2 -> { // Close register frame
+                registerFrame.setVisible(false);
+                successFrame.setVisible(false);
+                createLoginFrame(); // Go back to login screen
+            });
+            successPanel.add(loginButton);
+
+            successFrame.add(successPanel);
+            successFrame.setVisible(true);
+        });
+        registerPanel.add(registerButton);
+
+        registerFrame.add(registerPanel);
+        registerFrame.setVisible(true);
     }
 
     private boolean authenticateUser(String username, String password) {
