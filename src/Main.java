@@ -20,40 +20,63 @@ public class Main {
         frame.setLayout(null);
         frame.setResizable(false);
 
-        // Left panel (green background)
-        JPanel leftPanel = new JPanel();
-        leftPanel.setBackground(new Color(0, 128, 64)); // Green color
+        // Left panel with gradient background
+        JPanel leftPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                int width = getWidth();
+                int height = getHeight();
+                Color color1 = new Color(27, 80, 69); // Dark green
+                Color color2 = new Color(62, 182, 122); // Light green
+                GradientPaint gp = new GradientPaint(0, 0, color1, 0, height, color2);
+                g2d.setPaint(gp);
+                g2d.fillRect(0, 0, width, height);
+            }
+        };
         leftPanel.setBounds(0, 0, 250, 400);
         leftPanel.setLayout(null);
 
         // FEU text
         JLabel titleLabel = new JLabel("FEU");
-        titleLabel.setForeground(Color.WHITE);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
-        titleLabel.setBounds(90, 100, 100, 40);
+        titleLabel.setForeground(new Color(244, 226, 124));
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 72));
+        titleLabel.setBounds(30, 100, 200, 60);
         leftPanel.add(titleLabel);
 
         // "Online" text
         JLabel onlineLabel = new JLabel("Online");
         onlineLabel.setForeground(Color.WHITE);
-        onlineLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-        onlineLabel.setBounds(90, 140, 100, 30);
+        onlineLabel.setFont(new Font("Arial", Font.PLAIN, 24));
+        onlineLabel.setBounds(30, 160, 100, 30);
         leftPanel.add(onlineLabel);
 
         // "No Waiting, Just Earning" text
-        JLabel sloganLabel = new JLabel("No Waiting, Just Earning");
+        JLabel sloganLabel = new JLabel("<html><div style='text-align: center;'>No Waiting, Just Earning</div></html>");
         sloganLabel.setForeground(Color.WHITE);
-        sloganLabel.setFont(new Font("Arial", Font.ITALIC, 14));
-        sloganLabel.setBounds(40, 180, 200, 30);
+        sloganLabel.setFont(new Font("Arial", Font.ITALIC, 16));
+        sloganLabel.setBounds(30, 190, 200, 50);
         leftPanel.add(sloganLabel);
 
         frame.add(leftPanel);
 
         // Right panel
-        JPanel rightPanel = new JPanel();
-        rightPanel.setBackground(Color.WHITE);
+        JPanel rightPanel = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                Image image = new ImageIcon(getClass().getResource("/resources/0601res-feu-clip.jpg")).getImage();
+                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
+                g2d.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+                
+            }
+        };
         rightPanel.setBounds(250, 0, 350, 400);
         rightPanel.setLayout(null);
+        frame.add(rightPanel);  
+
 
         // Username label and text field
         JLabel usernameLabel = new JLabel("Username");
@@ -63,7 +86,10 @@ public class Main {
 
         JTextField usernameField = new JTextField();
         usernameField.setBounds(50, 130, 250, 30);
-        usernameField.setBackground(Color.WHITE);
+        usernameField.setBackground(new Color(240, 240, 240)); //
+        usernameField.setOpaque(true);
+        usernameField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 0, true)); // Rounded border
+        
         rightPanel.add(usernameField);
 
         // Password label and password field
@@ -74,15 +100,20 @@ public class Main {
 
         JPasswordField passwordField = new JPasswordField();
         passwordField.setBounds(50, 200, 250, 30);
+        passwordField.setBackground(new Color(240, 240, 240));
+        passwordField.setOpaque(true);
+        passwordField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 0, true)); // Rounded border
         rightPanel.add(passwordField);
 
-        ImageIcon openEyeIcon = new ImageIcon(Main.class.getResource("/resources/notvisible.png"));
-        ImageIcon closedEyeIcon = new ImageIcon(Main.class.getResource("/resources/visible-2.png"));
+        // Load icons
+        ImageIcon openEyeIcon = new ImageIcon(getClass().getResource("/resources/notvisible.png"));
+        ImageIcon closedEyeIcon = new ImageIcon(getClass().getResource("/resources/visible-2.png"));
 
         // Eye button to toggle password visibility
         JButton toggleButton = new JButton(openEyeIcon);
         toggleButton.setBounds(310, 200, 30, 30);
         toggleButton.setBorderPainted(false);
+        toggleButton.setContentAreaFilled(false);
         toggleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -100,9 +131,12 @@ public class Main {
         // Login button
         JButton loginButton = new JButton("LOG IN");
         loginButton.setBounds(50, 250, 250, 40);
-        loginButton.setBackground(Color.BLACK);
+        loginButton.setBackground(new Color(30, 30, 30));
+        loginButton.setOpaque(true);
         loginButton.setForeground(Color.WHITE);
         loginButton.setFont(new Font("Arial", Font.BOLD, 14));
+        loginButton.setBorder(BorderFactory.createLineBorder(new Color(30, 30, 30), 0, true)); // Rounded border
+        loginButton.setFocusPainted(false);
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -114,7 +148,7 @@ public class Main {
                     frame.setVisible(false);  // Hide login frame
                     createHomePage();        // Show home page
                 } else {
-                    System.out.println("Invalid credentials.");
+                    JOptionPane.showMessageDialog(frame, "Invalid credentials.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -132,6 +166,12 @@ public class Main {
         enrollNowLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         enrollNowLabel.setForeground(Color.GRAY);
         enrollNowLabel.setBounds(50, 320, 200, 20);
+        enrollNowLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                createRegisterPage();
+            }
+        });
         rightPanel.add(enrollNowLabel);
 
         frame.add(rightPanel);
@@ -165,14 +205,161 @@ public class Main {
         logoutButton.setBounds(250, 200, 100, 40);
         logoutButton.setBackground(Color.RED);
         logoutButton.setForeground(Color.WHITE);
+        logoutButton.setFont(new Font("Arial", Font.BOLD, 14));
+        logoutButton.setBorder(BorderFactory.createLineBorder(Color.RED, 1, true)); // Rounded border
+        logoutButton.setFocusPainted(false);
         logoutButton.addActionListener(e -> {
             // Log out and return to login page
-            homeFrame.setVisible(false);
-            createLoginFrame(); // Go back to login screen
+            homeFrame.dispose();
+            createLoginFrame();
         });
         homePanel.add(logoutButton);
 
         homeFrame.add(homePanel);
         homeFrame.setVisible(true);
+    }
+
+    private void createRegisterPage() {
+        JFrame registerFrame = new JFrame("FEU Register Page");
+        registerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        registerFrame.setSize(600, 400);
+        registerFrame.setLayout(null);
+
+        JPanel registerPanel = new JPanel();
+        registerPanel.setLayout(null);
+        registerPanel.setBounds(0, 0, 600, 400);
+
+        JLabel registerLabel = new JLabel("Register to FEU Online");
+        registerLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        registerLabel.setBounds(150, 20, 300, 40);
+        registerPanel.add(registerLabel);
+
+        // Panel for First Name, Middle Name, Last Name
+        JPanel namePanel = new JPanel();
+        namePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0)); // Horizontal layout with gaps
+        namePanel.setBounds(20, 70, 560, 30); // Adjust the width as needed
+
+        // First Name
+        namePanel.add(createLabel("First Name", 0, 0)); // Positioning within the panel is handled by FlowLayout
+        JTextField firstNameField = createTextField(0, 0);
+        namePanel.add(firstNameField);
+
+        // Middle Name
+        namePanel.add(createLabel("Middle Name", 0, 0));
+        JTextField middleNameField = createTextField(0, 0);
+        namePanel.add(middleNameField);
+
+        // Last Name
+        namePanel.add(createLabel("Last Name", 0, 0));
+        JTextField lastNameField = createTextField(0, 0);
+        namePanel.add(lastNameField);
+
+        registerPanel.add(namePanel);
+
+        // Email
+        registerPanel.add(createLabel("Email", 20, 120));
+        JTextField emailField = createTextField(20, 150);
+        registerPanel.add(emailField);
+
+        // Password
+        registerPanel.add(createLabel("Password", 20, 190));
+        JPasswordField passwordField = createPasswordField(20, 220);
+        registerPanel.add(passwordField);
+
+        // Confirm Password
+        registerPanel.add(createLabel("Confirm Password", 20, 260));
+        JPasswordField confirmPasswordField = createPasswordField(20, 290);
+        registerPanel.add(confirmPasswordField);
+
+        // Register button
+        JButton registerButton = new JButton("REGISTER");
+        registerButton.setBounds(20, 330, 150, 40);
+        registerButton.setBackground(Color.RED);
+        registerButton.setForeground(Color.WHITE);
+        registerButton.setFont(new Font("Arial", Font.BOLD, 14));
+        registerButton.setOpaque(true);
+        registerButton.setContentAreaFilled(false);
+        registerButton.setBorderPainted(false);
+        registerButton.addActionListener(e -> {
+            String firstName = firstNameField.getText();
+            String middleName = middleNameField.getText();
+            String lastName = lastNameField.getText();
+            String email = emailField.getText();
+            String password = new String(passwordField.getPassword());
+            String confirmPassword = new String(confirmPasswordField.getPassword());
+
+            if (!password.equals(confirmPassword)) {
+                JOptionPane.showMessageDialog(registerFrame, "Passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                // dummy registration logic 
+                System.out.println("Registered First Name: " + firstName);
+                System.out.println("Registered Middle Name: " + middleName);
+                System.out.println("Registered Last Name: " + lastName);
+                System.out.println("Registered Email: " + email);
+                System.out.println("Registered Password: " + password);
+                JOptionPane.showMessageDialog(registerFrame, "Registration successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                // Show success frame
+                JFrame successFrame = new JFrame("Registration Successful");
+                successFrame.setSize(400, 200);
+                successFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                successFrame.setLayout(null);
+
+                JPanel successPanel = new JPanel();
+                successPanel.setLayout(null);
+                successPanel.setBackground(Color.decode("#C4FFA9"));
+
+                JLabel successLabel = new JLabel("Registration Successful!");
+                successLabel.setFont(new Font("Arial", Font.BOLD, 24));
+                successLabel.setBounds(50, 50, 300, 40);
+                successLabel.setForeground(Color.BLACK);
+                successPanel.add(successLabel);
+
+                JButton loginButton = new JButton("GO BACK TO LOGIN");
+                loginButton.setBounds(100, 100, 200, 40);
+                loginButton.setBackground(Color.BLACK);
+                loginButton.setForeground(Color.WHITE);
+                loginButton.setFont(new Font("Arial", Font.BOLD, 14));
+                loginButton.setOpaque(true);
+                loginButton.setContentAreaFilled(false);
+                loginButton.setBorderPainted(false);
+                loginButton.addActionListener(e2 -> {
+                    successFrame.setVisible(false);
+                    registerFrame.dispose(); // Close the registration frame
+                    createLoginFrame(); // Go back to login screen
+                });
+                successPanel.add(loginButton);
+
+                successFrame.add(successPanel);
+                successFrame.setVisible(true);
+            }
+        });
+        registerPanel.add(registerButton);
+
+        registerFrame.add(registerPanel);
+        registerFrame.setVisible(true);
+    }
+
+    private JLabel createLabel(String text, int x, int y) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Arial", Font.PLAIN, 14));
+        label.setBounds(x, y, 200, 25);
+        return label;
+    }
+
+    private JTextField createTextField(int x, int y) {
+        JTextField textField = new JTextField();
+        textField.setPreferredSize(new Dimension(150, 30)); 
+        textField.setBackground(new Color(240, 240, 240));
+        textField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true)); 
+        return textField;
+    }
+
+    private JPasswordField createPasswordField(int x, int y) {
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setBounds(x, y, 250, 30);
+        passwordField.setBackground(new Color(240, 240, 240));
+        passwordField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
+        return passwordField;
     }
 }
