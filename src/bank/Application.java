@@ -1,5 +1,7 @@
 package bank;
 
+import bank.components.rightHomePage;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -57,21 +59,8 @@ public class Application {
         frame.add(leftPanel);
 
         // Right panel
-        JPanel rightPanel = new JPanel(){
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
-                Image image = new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/0601res-feu-clip.jpg"))).getImage();
-                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
-                g2d.drawImage(image, 0, 0, getWidth(), getHeight(), this);
-
-            }
-        };
-        rightPanel.setBounds(250, 0, 350, 400);
-        rightPanel.setLayout(null);
+        JPanel rightPanel = new rightHomePage();
         frame.add(rightPanel);
-
 
         // Username label and text field
         JLabel usernameLabel = new JLabel("Username");
@@ -151,15 +140,15 @@ public class Application {
 
         // Forgot password label
         JLabel forgotPasswordLabel = new JLabel("FORGOT PASSWORD");
-        forgotPasswordLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        forgotPasswordLabel.setForeground(Color.GRAY);
+        forgotPasswordLabel.setFont(new Font("Arial", Font.BOLD, 12));
+        forgotPasswordLabel.setForeground(Color.decode("747070"));
         forgotPasswordLabel.setBounds(50, 300, 150, 20);
         rightPanel.add(forgotPasswordLabel);
 
         // Enroll now label
         JLabel enrollNowLabel = new JLabel("NO ACCOUNT? ENROLL NOW");
-        enrollNowLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        enrollNowLabel.setForeground(Color.GRAY);
+        enrollNowLabel.setFont(new Font("Arial", Font.BOLD, 12));
+        enrollNowLabel.setForeground(Color.decode("747070"));
         enrollNowLabel.setBounds(50, 320, 200, 20);
         enrollNowLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
