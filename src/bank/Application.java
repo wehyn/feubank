@@ -22,9 +22,6 @@ public class Application {
         JPanel leftPanel = new leftHomePage();
         frame.add(leftPanel);
 
-
-
-
         // Right panel
         JPanel rightPanel = new rightHomePage();
         frame.add(rightPanel);

@@ -33,7 +33,6 @@ public class leftHomePage extends JPanel {
             add(titleLabel);
         }
 
-
         // "Online" text
         JLabel onlineLabel = new JLabel("Online");
         onlineLabel.setForeground(Color.WHITE);

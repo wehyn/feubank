@@ -8,8 +8,6 @@ public class rightHomePage extends JPanel {
     public rightHomePage(){
         setBounds(250, 0, 350, 400);
         setLayout(null);
-
-        JPanel rightPanel = new JPanel();
     }
 
     @Override
