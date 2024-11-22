@@ -1,5 +1,6 @@
 package bank;
 
+import bank.components.leftHomePage;
 import bank.components.rightHomePage;
 
 import javax.swing.*;
@@ -17,46 +18,12 @@ public class Application {
         frame.setLayout(null);
         frame.setResizable(false);
 
-        // Left panel with gradient background
-        JPanel leftPanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
-                int width = getWidth();
-                int height = getHeight();
-                Color color1 = new Color(27, 80, 69); // Dark green
-                Color color2 = new Color(62, 182, 122); // Light green
-                GradientPaint gp = new GradientPaint(0, 0, color1, 0, height, color2);
-                g2d.setPaint(gp);
-                g2d.fillRect(0, 0, width, height);
-            }
-        };
-        leftPanel.setBounds(0, 0, 250, 400);
-        leftPanel.setLayout(null);
-
-        // FEU text
-        JLabel titleLabel = new JLabel("FEU");
-        titleLabel.setForeground(new Color(244, 226, 124));
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 72));
-        titleLabel.setBounds(30, 100, 200, 60);
-        leftPanel.add(titleLabel);
-
-        // "Online" text
-        JLabel onlineLabel = new JLabel("Online");
-        onlineLabel.setForeground(Color.WHITE);
-        onlineLabel.setFont(new Font("Arial", Font.PLAIN, 24));
-        onlineLabel.setBounds(30, 160, 100, 30);
-        leftPanel.add(onlineLabel);
-
-        // "No Waiting, Just Earning" text
-        JLabel sloganLabel = new JLabel("<html><div style='text-align: center;'>No Waiting, Just Earning</div></html>");
-        sloganLabel.setForeground(Color.WHITE);
-        sloganLabel.setFont(new Font("Arial", Font.ITALIC, 16));
-        sloganLabel.setBounds(30, 190, 200, 50);
-        leftPanel.add(sloganLabel);
-
+        // Left panel
+        JPanel leftPanel = new leftHomePage();
         frame.add(leftPanel);
+
+
+
 
         // Right panel
         JPanel rightPanel = new rightHomePage();
