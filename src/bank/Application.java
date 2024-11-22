@@ -1,17 +1,12 @@
+package bank;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
+import java.util.Objects;
 
-public class Main {
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            Main mainApp = new Main();
-            mainApp.createLoginFrame();
-        });
-    }
-
+public class Application {
     public void createLoginFrame() {
         // Create the frame
         JFrame frame = new JFrame("FEU Online Login");
@@ -67,15 +62,15 @@ public class Main {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
-                Image image = new ImageIcon(getClass().getResource("/resources/0601res-feu-clip.jpg")).getImage();
+                Image image = new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/0601res-feu-clip.jpg"))).getImage();
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
                 g2d.drawImage(image, 0, 0, getWidth(), getHeight(), this);
-                
+
             }
         };
         rightPanel.setBounds(250, 0, 350, 400);
         rightPanel.setLayout(null);
-        frame.add(rightPanel);  
+        frame.add(rightPanel);
 
 
         // Username label and text field
@@ -89,7 +84,7 @@ public class Main {
         usernameField.setBackground(new Color(240, 240, 240)); //
         usernameField.setOpaque(true);
         usernameField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 0, true)); // Rounded border
-        
+
         rightPanel.add(usernameField);
 
         // Password label and password field
@@ -106,8 +101,8 @@ public class Main {
         rightPanel.add(passwordField);
 
         // Load icons
-        ImageIcon openEyeIcon = new ImageIcon(getClass().getResource("/resources/notvisible.png"));
-        ImageIcon closedEyeIcon = new ImageIcon(getClass().getResource("/resources/visible-2.png"));
+        ImageIcon openEyeIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/notvisible.png")));
+        ImageIcon closedEyeIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/visible-2.png")));
 
         // Eye button to toggle password visibility
         JButton toggleButton = new JButton(openEyeIcon);
@@ -291,7 +286,7 @@ public class Main {
             if (!password.equals(confirmPassword)) {
                 JOptionPane.showMessageDialog(registerFrame, "Passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
-                // dummy registration logic 
+                // dummy registration logic
                 System.out.println("Registered First Name: " + firstName);
                 System.out.println("Registered Middle Name: " + middleName);
                 System.out.println("Registered Last Name: " + lastName);
@@ -326,7 +321,7 @@ public class Main {
                 loginButton.addActionListener(e2 -> {
                     successFrame.setVisible(false);
                     registerFrame.dispose(); // Close the registration frame
-                    createLoginFrame(); // Go back to login screen
+                    createLoginFrame(); // Go back to log in screen
                 });
                 successPanel.add(loginButton);
 
@@ -349,9 +344,9 @@ public class Main {
 
     private JTextField createTextField(int x, int y) {
         JTextField textField = new JTextField();
-        textField.setPreferredSize(new Dimension(150, 30)); 
+        textField.setPreferredSize(new Dimension(150, 30));
         textField.setBackground(new Color(240, 240, 240));
-        textField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true)); 
+        textField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
         return textField;
     }
 
