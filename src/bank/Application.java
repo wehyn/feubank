@@ -28,29 +28,33 @@ public class Application {
 
         // Username label and text field
         JLabel usernameLabel = new JLabel("Username");
-        usernameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        usernameLabel.setFont(new Font("Arial", Font.BOLD, 14));
         usernameLabel.setBounds(50, 100, 100, 25);
+        usernameLabel.setForeground(Color.decode("#49454F"));
         rightPanel.add(usernameLabel);
 
         JTextField usernameField = new JTextField();
         usernameField.setBounds(50, 130, 250, 30);
-        usernameField.setBackground(new Color(240, 240, 240)); //
+        usernameField.setBackground(new Color(255, 255, 255)); //
         usernameField.setOpaque(true);
-        usernameField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 0, true)); // Rounded border
+        usernameField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true)); // Rounded border
 
         rightPanel.add(usernameField);
 
         // Password label and password field
         JLabel passwordLabel = new JLabel("Password");
-        passwordLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        passwordLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        passwordLabel.setForeground(Color.decode("#49454F"));
         passwordLabel.setBounds(50, 170, 100, 25);
-        rightPanel.add(passwordLabel);
+
 
         JPasswordField passwordField = new JPasswordField();
         passwordField.setBounds(50, 200, 250, 30);
-        passwordField.setBackground(new Color(240, 240, 240));
+        passwordField.setBackground(new Color(255, 255, 255));
         passwordField.setOpaque(true);
-        passwordField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 0, true)); // Rounded border
+        passwordField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true)); // Rounded border
+
+        rightPanel.add(passwordLabel);
         rightPanel.add(passwordField);
 
         // Load icons
@@ -83,7 +87,7 @@ public class Application {
         loginButton.setOpaque(true);
         loginButton.setForeground(Color.WHITE);
         loginButton.setFont(new Font("Arial", Font.BOLD, 14));
-        loginButton.setBorder(BorderFactory.createLineBorder(new Color(30, 30, 30), 0, true)); // Rounded border
+        loginButton.setBorder(BorderFactory.createLineBorder(new Color(30, 30, 30), 1, true)); // Rounded border
         loginButton.setFocusPainted(false);
         loginButton.addActionListener(new ActionListener() {
             @Override
