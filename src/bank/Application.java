@@ -141,35 +141,82 @@ public class Application {
         return "user".equals(username) && "password".equals(password);
     }
 
-    private void createHomePage() {
-        JFrame homeFrame = new JFrame("FEU Home Page");
-        homeFrame.setSize(600, 400);
+    public void createHomePage() {
+        JFrame homeFrame = new JFrame("Bank Home Page");
+        homeFrame.setSize(900, 585);
         homeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        JPanel homePanel = new JPanel();
-        homePanel.setLayout(null);
-
-        JLabel welcomeLabel = new JLabel("Welcome to FEU Online");
-        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        welcomeLabel.setBounds(150, 150, 300, 40);
-        homePanel.add(welcomeLabel);
-
-        JButton logoutButton = new JButton("LOG OUT");
-        logoutButton.setBounds(250, 200, 100, 40);
-        logoutButton.setBackground(Color.RED);
-        logoutButton.setForeground(Color.WHITE);
-        logoutButton.setFont(new Font("Arial", Font.BOLD, 14));
-        logoutButton.setBorder(BorderFactory.createLineBorder(Color.RED, 1, true)); // Rounded border
-        logoutButton.setFocusPainted(false);
-        logoutButton.addActionListener(e -> {
-            // Log out and return to login page
-            homeFrame.dispose();
-            createLoginFrame();
-        });
-        homePanel.add(logoutButton);
-
-        homeFrame.add(homePanel);
+        homeFrame.setResizable(false);
+        homeFrame.setLayout(new BorderLayout());
+        homeFrame.setLocationRelativeTo(null);
         homeFrame.setVisible(true);
+
+        JPanel dashboard = new JPanel();
+        dashboard.setBackground(Color.decode("#1B5045"));
+        dashboard.setPreferredSize(new Dimension(120, 100));
+        dashboard.setLayout(null);
+
+        JPanel homePage = new JPanel();
+        homePage.setBackground(Color.gray);
+
+        JLabel title = new JLabel("FEU");
+        title.setForeground(new Color(244,226,124));
+        title.setFont(new Font("Arial", Font.BOLD, 21));
+        title.setBounds(20,10,100,50);
+
+        JLabel online = new JLabel("Online");
+        online.setForeground(Color.white);
+        online.setFont(new Font("Arial", Font.BOLD, 18));
+        online.setBounds(20, 30, 100, 50);
+
+        JLabel load = new JLabel("Load");
+        load.setForeground(Color.white);
+        load.setFont(new Font("Arial", Font.PLAIN, 13));
+        load.setBounds(20, 90, 100, 50);
+
+        JLabel transfer = new JLabel("Transfer");
+        transfer.setForeground(Color.white);
+        transfer.setFont(new Font("Arial", Font.PLAIN, 13));
+        transfer.setBounds(20, 130, 100, 50);
+        JLabel loan = new JLabel("Loan");
+        loan.setFont(new Font("Arial", Font.PLAIN, 13));
+        loan.setForeground(Color.white);
+        loan.setBounds(20, 170, 100, 50);
+        JLabel bills = new JLabel("Bills");
+        bills.setForeground(Color.white);
+        bills.setFont(new Font("Arial", Font.PLAIN, 13));
+        bills.setBounds(20, 210, 100, 50);
+        JLabel inbox = new JLabel("Inbox");
+        inbox.setForeground(Color.white);
+        inbox.setFont(new Font("Arial", Font.PLAIN, 13));
+        inbox.setBounds(20, 250, 100, 50);
+
+        dashboard.add(title);
+        dashboard.add(online);
+        dashboard.add(load);
+        dashboard.add(transfer);
+        dashboard.add(loan);
+        dashboard.add(bills);
+        dashboard.add(inbox);
+
+
+
+
+
+//        JButton logoutButton = new JButton("LOG OUT");
+//        logoutButton.setBounds(250, 200, 100, 40);
+//        logoutButton.setBackground(Color.RED);
+//        logoutButton.setForeground(Color.WHITE);
+//        logoutButton.setFont(new Font("Arial", Font.BOLD, 14));
+//        logoutButton.setBorder(BorderFactory.createLineBorder(Color.RED, 1, true)); // Rounded border
+//        logoutButton.setFocusPainted(false);
+//        logoutButton.addActionListener(e -> {
+//            // Log out and return to login page
+//            homeFrame.dispose();
+//            createLoginFrame();
+//        });
+//        homePanel.add(logoutButton);
+        homeFrame.add(homePage);
+        homeFrame.add(dashboard, BorderLayout.WEST);
     }
 
     private void createRegisterPage() {
