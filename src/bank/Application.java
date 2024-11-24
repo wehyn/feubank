@@ -16,6 +16,7 @@ public class Application {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
         frame.setLayout(null);
+        frame.setLocationRelativeTo(null);
         frame.setResizable(false);
 
         // Left panel
@@ -29,12 +30,12 @@ public class Application {
         // Username label and text field
         JLabel usernameLabel = new JLabel("Username");
         usernameLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        usernameLabel.setBounds(50, 100, 100, 25);
+        usernameLabel.setBounds(20, 60, 100, 25);
         usernameLabel.setForeground(Color.decode("#49454F"));
         rightPanel.add(usernameLabel);
 
         JTextField usernameField = new JTextField();
-        usernameField.setBounds(50, 130, 250, 30);
+        usernameField.setBounds(20, 90, 260, 30);
         usernameField.setBackground(new Color(255, 255, 255)); //
         usernameField.setOpaque(true);
         usernameField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true)); // Rounded border
@@ -45,11 +46,11 @@ public class Application {
         JLabel passwordLabel = new JLabel("Password");
         passwordLabel.setFont(new Font("Arial", Font.BOLD, 14));
         passwordLabel.setForeground(Color.decode("#49454F"));
-        passwordLabel.setBounds(50, 170, 100, 25);
+        passwordLabel.setBounds(20, 130, 100, 25);
 
 
         JPasswordField passwordField = new JPasswordField();
-        passwordField.setBounds(50, 200, 250, 30);
+        passwordField.setBounds(20, 160, 260, 30);
         passwordField.setBackground(new Color(255, 255, 255));
         passwordField.setOpaque(true);
         passwordField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true)); // Rounded border
@@ -63,7 +64,7 @@ public class Application {
 
         // Eye button to toggle password visibility
         JButton toggleButton = new JButton(openEyeIcon);
-        toggleButton.setBounds(310, 200, 30, 30);
+        toggleButton.setBounds(280, 160, 30, 30);
         toggleButton.setBorderPainted(false);
         toggleButton.setContentAreaFilled(false);
         toggleButton.addActionListener(new ActionListener() {
@@ -82,7 +83,7 @@ public class Application {
 
         // Login button
         JButton loginButton = new JButton("LOG IN");
-        loginButton.setBounds(50, 250, 250, 40);
+        loginButton.setBounds(20, 210, 260, 40);
         loginButton.setBackground(new Color(30, 30, 30));
         loginButton.setOpaque(true);
         loginButton.setForeground(Color.WHITE);
@@ -110,14 +111,14 @@ public class Application {
         JLabel forgotPasswordLabel = new JLabel("FORGOT PASSWORD");
         forgotPasswordLabel.setFont(new Font("Arial", Font.BOLD, 12));
         forgotPasswordLabel.setForeground(Color.decode("747070"));
-        forgotPasswordLabel.setBounds(50, 300, 150, 20);
+        forgotPasswordLabel.setBounds(75, 260, 150, 20);
         rightPanel.add(forgotPasswordLabel);
 
         // Enroll now label
         JLabel enrollNowLabel = new JLabel("NO ACCOUNT? ENROLL NOW");
         enrollNowLabel.setFont(new Font("Arial", Font.BOLD, 12));
         enrollNowLabel.setForeground(Color.decode("747070"));
-        enrollNowLabel.setBounds(50, 320, 200, 20);
+        enrollNowLabel.setBounds(55, 300, 200, 20);
         enrollNowLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {

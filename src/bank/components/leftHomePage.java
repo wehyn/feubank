@@ -22,6 +22,20 @@ public class leftHomePage extends JPanel {
             titleLabel.setBounds(30, 100, 200, 60);
             add(titleLabel);
 
+            // "Online" text
+            JLabel onlineLabel = new JLabel("Online");
+            onlineLabel.setForeground(Color.WHITE);
+            onlineLabel.setFont(prostoFont.deriveFont(Font.PLAIN, 24)); // Apply Prosto One font (smaller size)
+            onlineLabel.setBounds(30, 160, 100, 30);
+            add(onlineLabel);
+
+            // "No Waiting, Just Earning" text
+            JLabel sloganLabel = new JLabel("<html><div style='text-align: center;'>No Waiting, Just Earning</div></html>");
+            sloganLabel.setForeground(Color.WHITE);
+            sloganLabel.setFont(prostoFont.deriveFont(Font.ITALIC, 16)); // Apply Prosto One font (italic)
+            sloganLabel.setBounds(30, 190, 200, 50);
+            add(sloganLabel);
+
         } catch (Exception e) {
             System.out.println("test");
             e.printStackTrace();
@@ -31,21 +45,22 @@ public class leftHomePage extends JPanel {
             titleLabel.setFont(new Font("Arial", Font.BOLD, 72));
             titleLabel.setBounds(30, 100, 200, 60);
             add(titleLabel);
+
+            // "Online" text
+            JLabel onlineLabel = new JLabel("Online");
+            onlineLabel.setForeground(Color.WHITE);
+            onlineLabel.setFont(new Font("Arial", Font.PLAIN, 24));
+            onlineLabel.setBounds(30, 160, 100, 30);
+            add(onlineLabel);
+
+            // "No Waiting, Just Earning" text
+            JLabel sloganLabel = new JLabel("<html><div style='text-align: center;'>No Waiting, Just Earning</div></html>");
+            sloganLabel.setForeground(Color.WHITE);
+            sloganLabel.setFont(new Font("Arial", Font.ITALIC, 16));
+            sloganLabel.setBounds(30, 190, 200, 50);
+            add(sloganLabel);
         }
 
-        // "Online" text
-        JLabel onlineLabel = new JLabel("Online");
-        onlineLabel.setForeground(Color.WHITE);
-        onlineLabel.setFont(new Font("Arial", Font.PLAIN, 24));
-        onlineLabel.setBounds(30, 160, 100, 30);
-        add(onlineLabel);
-
-        // "No Waiting, Just Earning" text
-        JLabel sloganLabel = new JLabel("<html><div style='text-align: center;'>No Waiting, Just Earning</div></html>");
-        sloganLabel.setForeground(Color.WHITE);
-        sloganLabel.setFont(new Font("Arial", Font.ITALIC, 16));
-        sloganLabel.setBounds(30, 190, 200, 50);
-        add(sloganLabel);
     }
 
     @Override
