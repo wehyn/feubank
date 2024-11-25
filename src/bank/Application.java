@@ -7,9 +7,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.List;
 
 public class Application {
+
+    // Stores the users
+    private List<BankAccountClass.UserAccount> accounts;
+
+    // State that will check the status of the account
+    public BankAccountClass.UserAccount loggedInAccount;
+
+    public Application() {
+        accounts = new ArrayList<>();
+    }
+
     public void createLoginFrame() {
         // Create the frame
         JFrame frame = new JFrame("FEU Online Login");
@@ -134,9 +147,13 @@ public class Application {
     }
 
     private boolean authenticateUser(String username, String password) {
-        // Implement actual authentication logic here
-        // Dummy authentication (Always returns true for demonstration)
-        return "user".equals(username) && "password".equals(password);
+        for (BankAccountClass.UserAccount account : accounts) {
+            if (account.checkUserCredentials(username, password)) {
+                loggedInAccount = account;
+                return true;
+            }
+        }
+        return false;
     }
 
     public void createHomePage() {
@@ -209,8 +226,10 @@ public class Application {
         // Add glue to push remaining items to the bottom
         sidebar.add(Box.createVerticalGlue());
 
+        String name = capitalizeFirstLetter(loggedInAccount.firstName) + " " + capitalizeFirstLetter(loggedInAccount.lastName);
+
         // Bottom menu items
-        JLabel userProfile = new JLabel("John Doe", SwingConstants.LEFT);
+        JLabel userProfile = new JLabel(name, SwingConstants.LEFT);
         userProfile.setForeground(Color.WHITE);
         userProfile.setFont(new Font("Arial", Font.BOLD, 14));
         userProfile.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -255,7 +274,9 @@ public class Application {
         cardPanel.setBackground(Color.white);
 
         // Welcome User
-        JLabel welcomeUser = new JLabel("Welcome, John Doe");
+
+
+        JLabel welcomeUser = new JLabel(name);
         welcomeUser.setForeground(Color.black);
         welcomeUser.setFont(new Font("Arial", Font.BOLD, 24));
         welcomeUser.setBorder(BorderFactory.createEmptyBorder(10,20,0,0));
@@ -318,9 +339,20 @@ public class Application {
         frame.setVisible(true);
     }
 
+    public static String capitalizeFirstLetter(String input) {
+        if (input == null || input.isEmpty()) {
+            return input; // Return as is if input is null or empty
+        }
+        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
+    }
+
 
     private void createRegisterPage() {
-        
+
+        BankAccountClass.UserAccount newAccount = new BankAccountClass.UserAccount("20241029", "john", "doe", "doe", "johndoe@gmail.com", "10292004", "Pasig City", 100, "admin", "1029");
+
+        accounts.add(newAccount);
+
         JFrame registerFrame = new JFrame("FEU Register Page");
         registerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         registerFrame.setSize(600, 400);
@@ -334,6 +366,16 @@ public class Application {
         registerLabel.setFont(new Font("Arial", Font.BOLD, 24));
         registerLabel.setBounds(150, 20, 300, 40);
         registerPanel.add(registerLabel);
+
+//        JButton testButton = new JButton();
+//        testButton.addActionListener(e -> {
+//            System.out.println(newAccount.accountNumber);
+//            }
+//        );
+//        testButton.setBounds(150, 20, 50, 50);
+
+
+//        registerPanel.add(testButton);
 
         // Panel for First Name, Middle Name, Last Name
         JPanel namePanel = new JPanel();
@@ -428,6 +470,7 @@ public class Application {
                     successFrame.setVisible(false);
                     registerFrame.dispose(); // Close the registration frame
                     createLoginFrame(); // Go back to log in screen
+
                 });
                 successPanel.add(loginButton);
 
