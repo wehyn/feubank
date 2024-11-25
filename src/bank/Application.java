@@ -135,8 +135,6 @@ public class Application {
 
     private boolean authenticateUser(String username, String password) {
         // Implement actual authentication logic here
-        System.out.println("Username: " + username);
-        System.out.println("Password: " + password);
         // Dummy authentication (Always returns true for demonstration)
         return "user".equals(username) && "password".equals(password);
     }
@@ -322,6 +320,7 @@ public class Application {
 
 
     private void createRegisterPage() {
+        
         JFrame registerFrame = new JFrame("FEU Register Page");
         registerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         registerFrame.setSize(600, 400);

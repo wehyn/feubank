@@ -5,15 +5,31 @@ import java.util.ArrayList;
 public class BankAccountClass {
     public static class BankAccount {
         String accountNumber; // Random Generated Account Number
-        double balance;
-        String username;
-        String birthday;
+        String username; // Auto generated First Name Initial + Middle Name Initial + Surname
+        String firstName;
+        String middleName;
+        String lastName;
         String email;
+        String birthday;
         String address;
-        String name;
-        ArrayList<Transaction> transactions = new ArrayList<>();
+        double balance;
         String password;
         String pin;
+        ArrayList<Transaction> transactions = new ArrayList<>();
+
+        public BankAccount(String accountNumber, String username, String firstName, String middleName, String lastName, String email, String birthday, String address, double balance, String password, String pin) {
+            this.accountNumber = accountNumber;
+            this.username = username;
+            this.firstName = firstName;
+            this.middleName = middleName;
+            this.lastName = lastName;
+            this.email = email;
+            this.birthday = birthday;
+            this.address = address;
+            this.balance = balance;
+            this.password = password;
+            this.pin = pin;
+        }
 
         private String getAccountNumber() {
             return this.accountNumber;
@@ -35,19 +51,9 @@ public class BankAccountClass {
             return this.email;
         }
 
-
-
-
-
-
-
-
         private boolean transferMoney() {
             return true;
         }
-
-
-
 
         // Need more getters and setters
 
