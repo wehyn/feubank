@@ -17,7 +17,7 @@ public class BankAccountClass {
         String pin;
         ArrayList<Transaction> transactions = new ArrayList<>();
 
-        public BankAccount(String accountNumber, String username, String firstName, String middleName, String lastName, String email, String birthday, String address, double balance, String password, String pin) {
+        public UserAccount(String accountNumber, String username, String firstName, String middleName, String lastName, String email, String birthday, String address, double balance, String password, String pin) {
             this.accountNumber = accountNumber;
             this.username = username;
             this.firstName = firstName;
