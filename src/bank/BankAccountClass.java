@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class BankAccountClass {
     public static class BankAccount {
-        String accountNumber;
+        String accountNumber; // Random Generated Account Number
         double balance;
         String username;
         String birthday;
@@ -35,7 +35,7 @@ public class BankAccountClass {
             return this.email;
         }
 
-        
+
 
 
 

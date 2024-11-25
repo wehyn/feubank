@@ -155,13 +155,10 @@ public class Application {
         dashboard.setPreferredSize(new Dimension(120, 100));
         dashboard.setLayout(null);
 
-        JPanel homePage = new JPanel();
-        homePage.setBackground(Color.gray);
-
         JLabel title = new JLabel("FEU");
-        title.setForeground(new Color(244,226,124));
+        title.setForeground(new Color(244, 226, 124));
         title.setFont(new Font("Arial", Font.BOLD, 21));
-        title.setBounds(20,10,100,50);
+        title.setBounds(20, 10, 100, 50);
 
         JLabel online = new JLabel("Online");
         online.setForeground(Color.white);
@@ -177,14 +174,17 @@ public class Application {
         transfer.setForeground(Color.white);
         transfer.setFont(new Font("Arial", Font.PLAIN, 13));
         transfer.setBounds(20, 130, 100, 50);
+
         JLabel loan = new JLabel("Loan");
         loan.setFont(new Font("Arial", Font.PLAIN, 13));
         loan.setForeground(Color.white);
         loan.setBounds(20, 170, 100, 50);
+
         JLabel bills = new JLabel("Bills");
         bills.setForeground(Color.white);
         bills.setFont(new Font("Arial", Font.PLAIN, 13));
         bills.setBounds(20, 210, 100, 50);
+
         JLabel inbox = new JLabel("Inbox");
         inbox.setForeground(Color.white);
         inbox.setFont(new Font("Arial", Font.PLAIN, 13));
@@ -198,26 +198,28 @@ public class Application {
         dashboard.add(bills);
         dashboard.add(inbox);
 
+        // Create the main panel to hold homePage and welcomeUser
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(Color.WHITE);
 
+        JPanel homePage = new JPanel();
+        homePage.setBackground(Color.WHITE);
+        homePage.setLayout(new FlowLayout(FlowLayout.LEFT));
+        homePage.setPreferredSize(new Dimension(780, 100));
 
+        // JLabel welcomeUser = new JLabel(BankAccount.getUsername());
+        JLabel welcomeUser = new JLabel("Welcome, Wayne");
+        welcomeUser.setForeground(Color.black);
+        welcomeUser.setFont(new Font("Arial", Font.BOLD, 24));
+        welcomeUser.setBorder(BorderFactory.createEmptyBorder(20, 15, 0, 0));
 
+        homePage.add(welcomeUser);
+        mainPanel.add(homePage, BorderLayout.NORTH);
 
-//        JButton logoutButton = new JButton("LOG OUT");
-//        logoutButton.setBounds(250, 200, 100, 40);
-//        logoutButton.setBackground(Color.RED);
-//        logoutButton.setForeground(Color.WHITE);
-//        logoutButton.setFont(new Font("Arial", Font.BOLD, 14));
-//        logoutButton.setBorder(BorderFactory.createLineBorder(Color.RED, 1, true)); // Rounded border
-//        logoutButton.setFocusPainted(false);
-//        logoutButton.addActionListener(e -> {
-//            // Log out and return to login page
-//            homeFrame.dispose();
-//            createLoginFrame();
-//        });
-//        homePanel.add(logoutButton);
-        homeFrame.add(homePage);
+        homeFrame.add(mainPanel, BorderLayout.CENTER);
         homeFrame.add(dashboard, BorderLayout.WEST);
     }
+
 
     private void createRegisterPage() {
         JFrame registerFrame = new JFrame("FEU Register Page");
