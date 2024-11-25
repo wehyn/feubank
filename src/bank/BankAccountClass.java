@@ -17,9 +17,9 @@ public class BankAccountClass {
         String pin;
         ArrayList<Transaction> transactions = new ArrayList<>();
 
-        public UserAccount(String accountNumber, String username, String firstName, String middleName, String lastName, String email, String birthday, String address, double balance, String password, String pin) {
+        public UserAccount(String accountNumber, String firstName, String middleName, String lastName, String email, String birthday, String address, double balance, String password, String pin) {
             this.accountNumber = accountNumber;
-            this.username = username;
+            this.username = (String.valueOf(firstName.charAt(0)) + middleName.charAt(0) + lastName).toLowerCase();
             this.firstName = firstName;
             this.middleName = middleName;
             this.lastName = lastName;
@@ -53,6 +53,12 @@ public class BankAccountClass {
 
         private boolean transferMoney() {
             return true;
+        }
+
+        public boolean checkUserCredentials(String username, String password) {
+            System.out.println(username);
+            System.out.println(password);
+            return this.username.equals(username) && this.password.equals(password);
         }
 
         // Need more getters and setters
