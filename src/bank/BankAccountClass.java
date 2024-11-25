@@ -3,7 +3,7 @@ package bank;
 import java.util.ArrayList;
 
 public class BankAccountClass {
-    public static class BankAccount {
+    public static class UserAccount {
         String accountNumber; // Random Generated Account Number
         String username; // Auto generated First Name Initial + Middle Name Initial + Surname
         String firstName;
