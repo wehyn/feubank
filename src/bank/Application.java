@@ -274,8 +274,6 @@ public class Application {
         cardPanel.setBackground(Color.white);
 
         // Welcome User
-
-
         JLabel welcomeUser = new JLabel(name);
         welcomeUser.setForeground(Color.black);
         welcomeUser.setFont(new Font("Arial", Font.BOLD, 24));
@@ -294,7 +292,7 @@ public class Application {
         savingsLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 0));
         savingsCard.add(savingsLabel, BorderLayout.NORTH);
 
-        JLabel balanceLabel = new JLabel("P 1,000,000", SwingConstants.CENTER);
+        JLabel balanceLabel = new JLabel("P " + loggedInAccount.balance, SwingConstants.CENTER);
         balanceLabel.setFont(new Font("Arial", Font.BOLD, 24));
         savingsCard.add(balanceLabel, BorderLayout.CENTER);
 
