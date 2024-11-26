@@ -31,6 +31,10 @@ public class BankAccountClass {
             this.pin = pin;
         }
 
+        public boolean checkUserCredentials(String username, String inputPassword) {
+            return (username.equals(this.username) || username.equals(this.email)) && this.password.equals(inputPassword);
+        }
+
         private String getAccountNumber() {
             return this.accountNumber;
         }
@@ -53,12 +57,6 @@ public class BankAccountClass {
 
         private boolean transferMoney() {
             return true;
-        }
-
-        public boolean checkUserCredentials(String username, String password) {
-            System.out.println(username);
-            System.out.println(password);
-            return this.username.equals(username) && this.password.equals(password);
         }
 
         // Need more getters and setters
