@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.List;
 
-public class Application {
+public class ApplicationNew {
 
     // Stores the users
     private List<BankAccountClass.UserAccount> accounts;
@@ -19,7 +19,7 @@ public class Application {
     // State that will check the status of the account
     public BankAccountClass.UserAccount loggedInAccount;
 
-    public Application() {
+    public ApplicationNew() {
         accounts = new ArrayList<>();
     }
 
@@ -200,7 +200,18 @@ public class Application {
         transfer.setFont(new Font("Arial",Font.BOLD,14));
         transfer.setAlignmentX(Component.LEFT_ALIGNMENT);
         transfer.setBorder(BorderFactory.createEmptyBorder(10, 20, 10,0));
+        transfer.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                openTransferPage(frame);
+            }
+        });
         sidebar.add(transfer);
+
+        frame.add(sidebar, BorderLayout.WEST);
+
+        // Set frame visible
+        frame.setVisible(true);
 
         JLabel loan = new JLabel("Loan", SwingConstants.LEFT);
         loan.setFont(new Font("Arial",Font.BOLD,14));
@@ -503,5 +514,168 @@ public class Application {
         passwordField.setBackground(new Color(240, 240, 240));
         passwordField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
         return passwordField;
+    }
+
+    private void openTransferPage(JFrame parentFrame){
+        JFrame frame = new JFrame("Banking Dashboard");
+        frame.setSize(1000, 700);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
+        frame.setLayout(new BorderLayout());
+
+        // Sidebar Panel
+        JPanel sidebar = new JPanel();
+        sidebar.setBackground(Color.decode("#1B5045"));
+        sidebar.setPreferredSize(new Dimension(180, frame.getHeight()));
+        sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
+
+        JLabel logoLabel = new JLabel("FEU", SwingConstants.LEFT);
+        logoLabel.setForeground(Color.decode("#F4E27C"));
+        logoLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        logoLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        logoLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+
+        JLabel onlineLabel = new JLabel("Online", SwingConstants.LEFT);
+        onlineLabel.setForeground(Color.white);
+        onlineLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        onlineLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        onlineLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 0));
+
+        sidebar.add(Box.createVerticalStrut(20));
+        sidebar.add(logoLabel);
+        sidebar.add(onlineLabel);
+
+        // NavBar
+        JLabel load = new JLabel("Load", SwingConstants.LEFT);
+        load.setForeground(Color.white);
+        load.setFont(new Font("Arial",Font.BOLD,14));
+        load.setAlignmentX(Component.LEFT_ALIGNMENT);
+        load.setBorder(BorderFactory.createEmptyBorder(10, 20, 10,0));
+        sidebar.add(load);
+
+        JLabel transfer = new JLabel("Transfer", SwingConstants.LEFT);
+        transfer.setForeground(Color.black);
+        transfer.setFont(new Font("Arial",Font.BOLD,18));
+        transfer.setAlignmentX(Component.LEFT_ALIGNMENT);
+        transfer.setBorder(BorderFactory.createEmptyBorder(10, 20, 10,0));
+        transfer.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                openTransferPage(frame);
+            }
+        });
+        sidebar.add(transfer);
+
+        frame.add(sidebar, BorderLayout.WEST);
+
+        // Set frame visible
+        frame.setVisible(true);
+
+        JLabel loan = new JLabel("Loan", SwingConstants.LEFT);
+        loan.setFont(new Font("Arial",Font.BOLD,14));
+        loan.setForeground(Color.white);
+        loan.setAlignmentX(Component.LEFT_ALIGNMENT);
+        loan.setBorder(BorderFactory.createEmptyBorder(10, 20, 10,0));
+        sidebar.add(loan);
+
+        JLabel bills = new JLabel("Bills", SwingConstants.LEFT);
+        bills.setForeground(Color.white);
+        bills.setFont(new Font("Arial",Font.BOLD,14));
+        bills.setAlignmentX(Component.LEFT_ALIGNMENT);
+        bills.setBorder(BorderFactory.createEmptyBorder(10, 20, 10,0));
+        sidebar.add(bills);
+
+        JLabel inbox = new JLabel("Inbox", SwingConstants.LEFT);
+        inbox.setForeground(Color.white);
+        inbox.setFont(new Font("Arial",Font.BOLD,14));
+        inbox.setAlignmentX(Component.LEFT_ALIGNMENT);
+        inbox.setBorder(BorderFactory.createEmptyBorder(10, 20, 10,0));
+        sidebar.add(inbox);
+
+        // Add glue to push remaining items to the bottom
+        sidebar.add(Box.createVerticalGlue());
+
+        String name = capitalizeFirstLetter(loggedInAccount.firstName) + " " + capitalizeFirstLetter(loggedInAccount.lastName);
+
+        // Bottom menu items
+        JLabel userProfile = new JLabel(name, SwingConstants.LEFT);
+        userProfile.setForeground(Color.WHITE);
+        userProfile.setFont(new Font("Arial", Font.BOLD, 14));
+        userProfile.setAlignmentX(Component.LEFT_ALIGNMENT);
+        userProfile.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 0)); // Padding
+        sidebar.add(userProfile);
+
+        JLabel customerSupport = new JLabel("Customer Support", SwingConstants.LEFT);
+        customerSupport.setForeground(Color.WHITE);
+        customerSupport.setFont(new Font("Arial", Font.BOLD, 14));
+        customerSupport.setAlignmentX(Component.LEFT_ALIGNMENT);
+        customerSupport.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 0)); // Padding
+        sidebar.add(customerSupport);
+
+        JLabel accountSettings = new JLabel("Account Settings", SwingConstants.LEFT);
+        accountSettings.setForeground(Color.WHITE);
+        accountSettings.setFont(new Font("Arial", Font.BOLD, 14));
+        accountSettings.setAlignmentX(Component.LEFT_ALIGNMENT);
+        accountSettings.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 0)); // Padding
+        sidebar.add(accountSettings);
+
+        // Header Panel
+        JPanel header = new JPanel(new BorderLayout());
+        header.setBackground(Color.WHITE);
+        JLabel welcomeLabel = new JLabel("Welcome, Patricia!", SwingConstants.LEFT);
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        header.add(welcomeLabel, BorderLayout.WEST);
+
+        // Main Content Panel
+        JPanel mainContent = new JPanel();
+        mainContent.setLayout(new BorderLayout());
+        mainContent.setBackground(Color.WHITE);
+
+        // Top Panel
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BorderLayout());
+        topPanel.setBackground(Color.WHITE);
+
+        // Add components to frame
+        frame.add(sidebar, BorderLayout.WEST);
+        frame.add(mainContent, BorderLayout.CENTER);
+
+        frame.setVisible(true);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2,1));
+        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 150, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(300, 300, 300, 300));
+
+        JButton feuTransferButton = new JButton("FEU Bank Account Transfer");
+        feuTransferButton.setFont(new Font("Arial", Font.BOLD, 16));
+        feuTransferButton.setBackground(Color.decode("#1E1E1E"));
+        feuTransferButton.setForeground(Color.WHITE);
+        feuTransferButton.setPreferredSize(new Dimension(300, 100));
+        feuTransferButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(frame, "Transfer to FEU Bank Account selected.");
+            }
+        });
+        panel.add(feuTransferButton);
+
+        JButton otherTransferButton = new JButton("Other Bank Account Transfer");
+        otherTransferButton.setFont(new Font("Arial", Font.BOLD, 16));
+        otherTransferButton.setBackground(Color.decode("#1E1E1E"));
+        otherTransferButton.setForeground(Color.WHITE);
+        otherTransferButton.setPreferredSize(new Dimension(300, 100));
+        otherTransferButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(frame, "Transfer to Other Bank Account selected.");
+            }
+        });
+        panel.add(otherTransferButton);
+
+        frame.add(panel);
+        frame.setLocationRelativeTo(parentFrame);
+        frame.setVisible(true);
     }
 }
