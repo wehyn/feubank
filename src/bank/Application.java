@@ -248,13 +248,6 @@ public class Application {
         accountSettings.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 0)); // Padding
         sidebar.add(accountSettings);
 
-        // Header Panel
-        JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(Color.WHITE);
-        JLabel welcomeLabel = new JLabel("Welcome, Patricia!", SwingConstants.LEFT);
-        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        header.add(welcomeLabel, BorderLayout.WEST);
-
         // Main Content Panel
         JPanel mainContent = new JPanel();
         mainContent.setLayout(new BorderLayout());
