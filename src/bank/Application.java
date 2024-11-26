@@ -198,8 +198,9 @@ public class Application {
                 navLabel.setForeground(Color.WHITE);
                 navLabel.setFont(new Font("Arial", Font.BOLD, 14));
                 navLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0)); //
-                
-                navPanels[i].setPreferredSize(new Dimension(150, 3 )); // Adjust width (150) as needed
+
+                navPanels[i].setMinimumSize(new Dimension(180, 3000));
+                navPanels[i].setMaximumSize(new Dimension(180, 3000));
 
                 final int index = i;
                 navPanels[i].addMouseListener(new java.awt.event.MouseAdapter() {
@@ -217,7 +218,6 @@ public class Application {
                         cardLayout.show(mainContentCards, navItems[index].toLowerCase());
                     }
                 });
-                
 
                 navPanels[i].add(navLabel, BorderLayout.CENTER);
                 sidebar.add(navPanels[i]);
@@ -244,8 +244,6 @@ public class Application {
             userProfile.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
             sidebar.add(userProfile);
 
-
-        
             // Add components to frame
             frame.add(sidebar, BorderLayout.WEST);
             frame.add(mainContentCards, BorderLayout.CENTER);
