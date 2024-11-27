@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Authentication {
-    private List<BankAccountClass.UserAccount> accounts;
+    public List<BankAccountClass.UserAccount> accounts;
     private BankAccountClass.UserAccount loggedInAccount;
 
     public Authentication() {
@@ -14,13 +14,13 @@ public class Authentication {
 
     private void createTestAccount() {
         BankAccountClass.UserAccount testAccount = new BankAccountClass.UserAccount(
-                "20241029", "john", "doe", "doe",
+                 "john", "doe", "doe",
                 "johndoe@gmail.com", "10292004", "Pasig City",
                 1000.0, "admin", "1029"
         );
 
         BankAccountClass.UserAccount secondTestAccount = new BankAccountClass.UserAccount(
-                "20245029", "jane", "coe", "doe",
+                "jane", "coe", "doe",
                 "janedoe@gmail.com", "10292005", "Quezon City",
                 1000.0, "admin", "1029"
         );
@@ -31,7 +31,10 @@ public class Authentication {
         testAccount.transferMoney(secondTestAccount, 200);
         testAccount.transferMoney(secondTestAccount, 100);
 
+    }
 
+    public void addUser(BankAccountClass.UserAccount newUser) {
+        accounts.add(newUser);
     }
 
     public boolean authenticate(String username, String password) {
