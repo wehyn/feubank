@@ -3,10 +3,13 @@ package bank;
 import bank.components.leftHomePage;
 import bank.components.rightHomePage;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.logging.LoggingPermission;
@@ -154,7 +157,7 @@ public class Application {
             frame.setResizable(false);
             frame.setLocationRelativeTo(null);
             frame.setLayout(new BorderLayout());
-        
+
             // Create CardLayout for main content
             CardLayout cardLayout = new CardLayout();
             JPanel mainContentCards = new JPanel(cardLayout);
@@ -184,7 +187,7 @@ public class Application {
             sidebar.add(onlineLabel);
         
             // Create navigation items with panels
-            String[] navItems = {"Home", "Load", "Transfer", "Loan", "Bills", "Inbox"};
+            String[] navItems = {"Home", "Load", "Transfer", "Loan"};
             JPanel[] navPanels = new JPanel[navItems.length];
             
             for (int i = 0; i < navItems.length; i++) {
@@ -277,44 +280,108 @@ public class Application {
 
         JPanel homePanel = new JPanel(new BorderLayout());
         homePanel.setBackground(Color.WHITE);
-        
+
         // Top Panel for Welcome and Cards
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBackground(Color.WHITE);
-    
+
         // Welcome User
         String name = capitalizeFirstLetter(user.firstName) + " " +
                      capitalizeFirstLetter(user.lastName);
         JLabel welcomeLabel = new JLabel("Welcome, " + name, SwingConstants.LEFT);
-        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 28));
         welcomeLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         topPanel.add(welcomeLabel, BorderLayout.NORTH);
-    
+
         // Card Panel (Account Summary)
-        JPanel cardPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
+        JPanel cardPanel = new JPanel(new GridBagLayout());
         cardPanel.setBackground(Color.WHITE);
-    
+        cardPanel.setOpaque(true);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10); // Padding between components
+
         // Savings Account Card
-        JPanel savingsCard = new JPanel(new BorderLayout());
-        savingsCard.setPreferredSize(new Dimension(250, 150));
-        savingsCard.setBackground(Color.decode("#FBE470"));
-        savingsCard.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-    
+        JPanel savingsCard = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                try {
+                    BufferedImage backgroundImage = ImageIO.read(getClass().getResourceAsStream("/resources/0601res-feu-clip.jpg"));
+                    g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        savingsCard.setLayout(new BorderLayout());
+        savingsCard.setPreferredSize(new Dimension(350, 200));
+
         JLabel savingsLabel = new JLabel("Savings Account", SwingConstants.LEFT);
         savingsLabel.setFont(new Font("Arial", Font.BOLD, 14));
         savingsLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 0));
         savingsCard.add(savingsLabel, BorderLayout.NORTH);
-    
-        JLabel balanceLabel = new JLabel("P " + user.balance, SwingConstants.CENTER);
-        balanceLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        savingsCard.add(balanceLabel, BorderLayout.CENTER);
-    
-        cardPanel.add(savingsCard);
+
+        //Blackpanel inside the savingscard
+        JPanel blackPanel = new JPanel (new BorderLayout());
+        blackPanel.setPreferredSize(new Dimension(350, 50));
+        blackPanel.setBackground(Color.BLACK);
+        savingsCard.add(blackPanel, BorderLayout.SOUTH);
+
+        JLabel balanceLabel = new JLabel("P " + user.balance, SwingConstants.LEFT);
+        balanceLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        balanceLabel.setForeground(Color.WHITE);
+        balanceLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+        blackPanel.add(balanceLabel, BorderLayout.WEST);
+
+        String maskedAccountNumber = "•••• " + user.accountNumber.substring(user.accountNumber.length() - 4);
+        JLabel accountNumber = new JLabel(maskedAccountNumber, SwingConstants.RIGHT);
+        accountNumber.setFont(new Font("Arial", Font.BOLD, 20));
+        accountNumber.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+        accountNumber.setForeground(Color.WHITE);
+        blackPanel.add(accountNumber,BorderLayout.EAST);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridheight = 2; // Spans two rows
+        cardPanel.add(savingsCard, gbc);
+
+        JPanel creditBalance = new JPanel(new BorderLayout());
+        creditBalance.setPreferredSize(new Dimension(150, 200));
+        creditBalance.setBackground(new Color(245,245,245));
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridheight = 2;
+
+        JLabel balanceText = new JLabel("Credit Balance");
+        balanceText.setFont(new Font("Arial", Font.BOLD, 14));
+        balanceLabel.setForeground(Color.BLACK);
+        creditBalance.add(balanceText,BorderLayout.WEST);
+
+        JLabel balanceAmount = new JLabel("P" );
+        balanceAmount.setFont(new Font("Arial", Font.BOLD, 14));
+        creditBalance.add(balanceAmount, BorderLayout.WEST);
+        cardPanel.add(creditBalance, gbc);
+
+        JPanel creditLimit = new JPanel(new BorderLayout());
+        creditLimit.setPreferredSize(new Dimension(200, 90));
+        creditLimit.setBackground(Color.GRAY);
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.gridheight = 1; // Single row
+        cardPanel.add(creditLimit, gbc);
+
+        JPanel creditDebt = new JPanel(new BorderLayout());
+        creditDebt.setPreferredSize(new Dimension(200, 90));
+        creditDebt.setBackground(Color.GRAY);
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        cardPanel.add(creditDebt, gbc);
+
         topPanel.add(cardPanel, BorderLayout.CENTER);
-    
+
         // Add top panel to home panel
         homePanel.add(topPanel, BorderLayout.NORTH);
-    
+
         // Transactions Panel
         JPanel transactionsPanel = new JPanel();
         transactionsPanel.setLayout(new BoxLayout(transactionsPanel, BoxLayout.Y_AXIS));
@@ -329,9 +396,9 @@ public class Application {
             transactionLabel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 0));
             transactionsPanel.add(transactionLabel);
         }
-    
+
         homePanel.add(transactionsPanel, BorderLayout.CENTER);
-    
+
         return homePanel;
     }
 
@@ -343,6 +410,9 @@ public class Application {
 
 
     private JPanel createLoadContent() {
+
+        BankAccountClass.UserAccount user = authentication.getLoggedInAccount();
+
         JPanel loadPanel = new JPanel(null);
         loadPanel.setBackground(Color.WHITE);
         loadPanel.setPreferredSize(new Dimension(800, 700));
@@ -377,6 +447,21 @@ public class Application {
         JComboBox<String> methodComboBox = new JComboBox<>(methods);
         methodComboBox.setBounds(40, 200, 300, 35);
         leftPanel.add(methodComboBox);
+
+        JPanel balancePanel = new JPanel();
+        balancePanel.setBackground(new Color(235,235,235));
+        balancePanel.setBounds(40, 240, 300, 50);
+        leftPanel.add(balancePanel);
+
+        JLabel amountAvail = new JLabel("Amount Available:\n");
+        amountAvail.setFont(new Font("Arial", Font.BOLD, 14));
+        amountAvail.setBounds(40, 240, 150, 25);
+        balancePanel.add(amountAvail);
+
+        JLabel balance = new JLabel("P" + user.balance);
+        balance.setFont(new Font("Arial", Font.BOLD, 18));
+        balance.setBounds(40, 270, 150, 25);
+        balancePanel.add(balance);
     
         // Right Panel (Yellow)
         JPanel rightPanel = new JPanel(null);
@@ -402,9 +487,24 @@ public class Application {
         amountField.setBounds(40, 160, 300, 35);
         amountField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
         rightPanel.add(amountField);
+
+        JLabel feeLabel = new JLabel("Transaction Fee: ");
+        feeLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        feeLabel.setBounds(40, 210, 150, 25);
+        rightPanel.add(feeLabel);
+
+        JLabel feeText = new JLabel("P");
+        feeText.setFont(new Font("Arial", Font.BOLD, 14));
+        feeText.setBounds(40, 240, 150, 25);
+        rightPanel.add(feeText);
+
+        JLabel feeNote = new JLabel("<html>Note: Transaction fee varies from <br> service provider</html>\"");
+        feeNote.setFont(new Font("Arial", Font.ITALIC, 14));
+        feeNote.setBounds(40, 280, 300, 25);
+        rightPanel.add(feeNote);
     
         JButton loadButton = new JButton("LOAD MONEY");
-        loadButton.setBounds(40, 220, 300, 40);
+        loadButton.setBounds(40, 350, 300, 40);
         loadButton.setBackground(new Color(30, 30, 30));
         loadButton.setForeground(Color.WHITE);
         loadButton.setFont(new Font("Arial", Font.BOLD, 14));
