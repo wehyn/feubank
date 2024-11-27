@@ -18,7 +18,20 @@ public class Authentication {
                 "johndoe@gmail.com", "10292004", "Pasig City",
                 1000.0, "admin", "1029"
         );
+
+        BankAccountClass.UserAccount secondTestAccount = new BankAccountClass.UserAccount(
+                "20245029", "jane", "coe", "doe",
+                "janedoe@gmail.com", "10292005", "Quezon City",
+                1000.0, "admin", "1029"
+        );
         accounts.add(testAccount);
+        accounts.add(secondTestAccount);
+
+        // TransferMoney Test
+        testAccount.transferMoney(secondTestAccount, 200);
+        testAccount.transferMoney(secondTestAccount, 100);
+
+
     }
 
     public boolean authenticate(String username, String password) {
