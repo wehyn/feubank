@@ -24,8 +24,6 @@ public class Application {
         authentication = new Authentication();
     }
 
-
-
     public void createLoginFrame() {
         // Create the frame
         JFrame frame = new JFrame("FEU Online Login");
@@ -274,6 +272,9 @@ public class Application {
     }
 
     private JPanel createHomeContent(){
+
+        BankAccountClass.UserAccount user = authentication.getLoggedInAccount();
+
         JPanel homePanel = new JPanel(new BorderLayout());
         homePanel.setBackground(Color.WHITE);
         
@@ -282,8 +283,8 @@ public class Application {
         topPanel.setBackground(Color.WHITE);
     
         // Welcome User
-        String name = capitalizeFirstLetter(authentication.getLoggedInAccount().firstName) + " " + 
-                     capitalizeFirstLetter(authentication.getLoggedInAccount().lastName);
+        String name = capitalizeFirstLetter(user.firstName) + " " +
+                     capitalizeFirstLetter(user.lastName);
         JLabel welcomeLabel = new JLabel("Welcome, " + name, SwingConstants.LEFT);
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 24));
         welcomeLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -304,7 +305,7 @@ public class Application {
         savingsLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 0));
         savingsCard.add(savingsLabel, BorderLayout.NORTH);
     
-        JLabel balanceLabel = new JLabel("P " + authentication.getLoggedInAccount().balance, SwingConstants.CENTER);
+        JLabel balanceLabel = new JLabel("P " + user.balance, SwingConstants.CENTER);
         balanceLabel.setFont(new Font("Arial", Font.BOLD, 24));
         savingsCard.add(balanceLabel, BorderLayout.CENTER);
     
@@ -319,12 +320,14 @@ public class Application {
         transactionsPanel.setLayout(new BoxLayout(transactionsPanel, BoxLayout.Y_AXIS));
         transactionsPanel.setBackground(Color.decode("#F5F5F5"));
         transactionsPanel.setBorder(BorderFactory.createTitledBorder("Transactions"));
-    
-        for (int i = 0; i < 5; i++) {
-            JLabel transaction = new JLabel("Transaction #" + (i + 1) + ": Details");
-            transaction.setFont(new Font("Arial", Font.PLAIN, 14));
-            transaction.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 0));
-            transactionsPanel.add(transaction);
+
+        ArrayList<BankAccountClass.Transaction> userTransactions = user.getTransactions();
+
+        for (BankAccountClass.Transaction transaction : userTransactions) {
+            JLabel transactionLabel = new JLabel(transaction.details + ": "+ transaction.amount);
+            transactionLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+            transactionLabel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 0));
+            transactionsPanel.add(transactionLabel);
         }
     
         homePanel.add(transactionsPanel, BorderLayout.CENTER);
