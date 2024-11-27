@@ -55,7 +55,34 @@ public class BankAccountClass {
             return this.email;
         }
 
-        private boolean transferMoney() {
+        public boolean transferMoney(UserAccount recipient, double amount) {
+            if (amount <= 0) {
+                return false;
+            }
+
+            if (this.balance < 0) {
+                return false;
+            }
+
+            this.balance -= amount;
+
+            recipient.balance += amount;
+
+            Transaction senderTransaction = new Transaction();
+            senderTransaction.accountNumber = this.accountNumber;
+            senderTransaction.date = java.time.LocalDate.now().toString();
+            senderTransaction.recipient = recipient.accountNumber;
+            senderTransaction.amount = -amount;
+
+            Transaction recipientTransaction = new Transaction();
+            recipientTransaction.accountNumber = recipient.accountNumber;
+            recipientTransaction.date = java.time.LocalDate.now().toString();
+            recipientTransaction.recipient = this.accountNumber;
+            recipientTransaction.amount = amount;
+
+            this.transactions.add(senderTransaction);
+            recipient.transactions.add(recipientTransaction);
+
             return true;
         }
 
