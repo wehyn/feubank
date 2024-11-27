@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.logging.LoggingPermission;
@@ -151,106 +152,106 @@ public class Application {
     }
 
     public void createHomePage() {
-            JFrame frame = new JFrame("Banking Dashboard");
-            frame.setSize(1000, 700);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setResizable(false);
-            frame.setLocationRelativeTo(null);
-            frame.setLayout(new BorderLayout());
+        JFrame frame = new JFrame("Banking Dashboard");
+        frame.setSize(1000, 700);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
+        frame.setLayout(new BorderLayout());
 
-            // Create CardLayout for main content
-            CardLayout cardLayout = new CardLayout();
-            JPanel mainContentCards = new JPanel(cardLayout);
-            mainContentCards.setBackground(Color.WHITE);
-        
-            // Sidebar
-            JPanel sidebar = new JPanel();
-            sidebar.setBackground(Color.decode("#1B5045"));
-            sidebar.setPreferredSize(new Dimension(180, frame.getHeight()));
-            sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
-        
-            // Logo and title
-            JLabel logoLabel = new JLabel("FEU", SwingConstants.LEFT);
-            logoLabel.setForeground(Color.decode("#F4E27C"));
-            logoLabel.setFont(new Font("Arial", Font.BOLD, 18));
-            logoLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-            logoLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
-        
-            JLabel onlineLabel = new JLabel("Online", SwingConstants.LEFT);
-            onlineLabel.setForeground(Color.WHITE);
-            onlineLabel.setFont(new Font("Arial", Font.BOLD, 18));
-            onlineLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-            onlineLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 0));
-        
-            sidebar.add(Box.createVerticalStrut(20)); 
-            sidebar.add(logoLabel);
-            sidebar.add(onlineLabel);
-        
-            // Create navigation items with panels
-            String[] navItems = {"Home", "Load", "Transfer", "Loan"};
-            JPanel[] navPanels = new JPanel[navItems.length];
-            
-            for (int i = 0; i < navItems.length; i++) {
-                navPanels[i] = new JPanel(new BorderLayout());
-                navPanels[i].setOpaque(false);
-                
-                // Create label
-                JLabel navLabel = new JLabel(navItems[i], SwingConstants.LEFT);
-                navLabel.setForeground(Color.WHITE);
-                navLabel.setFont(new Font("Arial", Font.BOLD, 14));
-                navLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0)); //
+        // Create CardLayout for main content
+        CardLayout cardLayout = new CardLayout();
+        JPanel mainContentCards = new JPanel(cardLayout);
+        mainContentCards.setBackground(Color.WHITE);
 
-                navPanels[i].setMinimumSize(new Dimension(180, 3000));
-                navPanels[i].setMaximumSize(new Dimension(180, 3000));
+        // Sidebar
+        JPanel sidebar = new JPanel();
+        sidebar.setBackground(Color.decode("#1B5045"));
+        sidebar.setPreferredSize(new Dimension(180, frame.getHeight()));
+        sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
 
-                final int index = i;
-                navPanels[i].addMouseListener(new java.awt.event.MouseAdapter() {
-                    @Override
-                    public void mouseClicked(java.awt.event.MouseEvent e) {
-                        // Reset all backgrounds
-                        for (JPanel panel : navPanels) {
-                            panel.setBackground(new Color(27, 80, 69));
-                            panel.setOpaque(false);
-                        }
-                        // Highlight selected
-                        navPanels[index].setBackground(new Color(62, 182, 122));
-                        navPanels[index].setOpaque(true);
-                        // Switch content
-                        cardLayout.show(mainContentCards, navItems[index].toLowerCase());
+        // Logo and title
+        JLabel logoLabel = new JLabel("FEU", SwingConstants.LEFT);
+        logoLabel.setForeground(Color.decode("#F4E27C"));
+        logoLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        logoLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        logoLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+
+        JLabel onlineLabel = new JLabel("Online", SwingConstants.LEFT);
+        onlineLabel.setForeground(Color.WHITE);
+        onlineLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        onlineLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        onlineLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 0));
+
+        sidebar.add(Box.createVerticalStrut(20));
+        sidebar.add(logoLabel);
+        sidebar.add(onlineLabel);
+
+        // Create navigation items with panels
+        String[] navItems = {"Home", "Load", "Transfer", "Loan"};
+        JPanel[] navPanels = new JPanel[navItems.length];
+
+        for (int i = 0; i < navItems.length; i++) {
+            navPanels[i] = new JPanel(new BorderLayout());
+            navPanels[i].setOpaque(false);
+
+            // Create label
+            JLabel navLabel = new JLabel(navItems[i], SwingConstants.LEFT);
+            navLabel.setForeground(Color.WHITE);
+            navLabel.setFont(new Font("Arial", Font.BOLD, 14));
+            navLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0)); //
+
+            navPanels[i].setMinimumSize(new Dimension(180, 3000));
+            navPanels[i].setMaximumSize(new Dimension(180, 3000));
+
+            final int index = i;
+            navPanels[i].addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {
+                    // Reset all backgrounds
+                    for (JPanel panel : navPanels) {
+                        panel.setBackground(new Color(27, 80, 69));
+                        panel.setOpaque(false);
                     }
-                });
+                    // Highlight selected
+                    navPanels[index].setBackground(new Color(62, 182, 122));
+                    navPanels[index].setOpaque(true);
+                    // Switch content
+                    cardLayout.show(mainContentCards, navItems[index].toLowerCase());
+                }
+            });
 
-                navPanels[i].add(navLabel, BorderLayout.CENTER);
-                sidebar.add(navPanels[i]);
-                
-                // Create and add content panel
-                JPanel contentPanel = createContentPanel(navItems[i].toLowerCase());
-                mainContentCards.add(contentPanel, navItems[i].toLowerCase());
-            }
-            // Highlight the first item
-            navPanels[0].setBackground(new Color(62, 182, 122));
-            navPanels[0].setOpaque(true);
-            cardLayout.show(mainContentCards, "home");
-        
-            // Add glue to push remaining items to bottom
-            sidebar.add(Box.createVerticalGlue());
-        
-            // Add user info at bottom
-            String name = capitalizeFirstLetter(authentication.getLoggedInAccount().firstName) + " " + 
-                         capitalizeFirstLetter(authentication.getLoggedInAccount().lastName);
-            JLabel userProfile = new JLabel(name, SwingConstants.LEFT);
-            userProfile.setForeground(Color.WHITE);
-            userProfile.setFont(new Font("Arial", Font.BOLD, 14));
-            userProfile.setAlignmentX(Component.LEFT_ALIGNMENT);
-            userProfile.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-            sidebar.add(userProfile);
+            navPanels[i].add(navLabel, BorderLayout.CENTER);
+            sidebar.add(navPanels[i]);
 
-            // Add components to frame
-            frame.add(sidebar, BorderLayout.WEST);
-            frame.add(mainContentCards, BorderLayout.CENTER);
-            
-            frame.setVisible(true);
+            // Create and add content panel
+            JPanel contentPanel = createContentPanel(navItems[i].toLowerCase());
+            mainContentCards.add(contentPanel, navItems[i].toLowerCase());
         }
+        // Highlight the first item
+        navPanels[0].setBackground(new Color(62, 182, 122));
+        navPanels[0].setOpaque(true);
+        cardLayout.show(mainContentCards, "home");
+
+        // Add glue to push remaining items to bottom
+        sidebar.add(Box.createVerticalGlue());
+
+        // Add user info at bottom
+        String name = capitalizeFirstLetter(authentication.getLoggedInAccount().firstName) + " " +
+                capitalizeFirstLetter(authentication.getLoggedInAccount().lastName);
+        JLabel userProfile = new JLabel(name, SwingConstants.LEFT);
+        userProfile.setForeground(Color.WHITE);
+        userProfile.setFont(new Font("Arial", Font.BOLD, 14));
+        userProfile.setAlignmentX(Component.LEFT_ALIGNMENT);
+        userProfile.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        sidebar.add(userProfile);
+
+        // Add components to frame
+        frame.add(sidebar, BorderLayout.WEST);
+        frame.add(mainContentCards, BorderLayout.CENTER);
+
+        frame.setVisible(true);
+    }
 
 
     // Add the cards panel to the frame
@@ -264,7 +265,7 @@ public class Application {
     private JPanel createContentPanel(String type) {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
-        
+
         return switch (type) {
             case "home" -> createHomeContent();
             case "load" -> createLoadContent();
@@ -287,7 +288,7 @@ public class Application {
 
         // Welcome User
         String name = capitalizeFirstLetter(user.firstName) + " " +
-                     capitalizeFirstLetter(user.lastName);
+                capitalizeFirstLetter(user.lastName);
         JLabel welcomeLabel = new JLabel("Welcome, " + name, SwingConstants.LEFT);
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 28));
         welcomeLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -416,33 +417,33 @@ public class Application {
         JPanel loadPanel = new JPanel(null);
         loadPanel.setBackground(Color.WHITE);
         loadPanel.setPreferredSize(new Dimension(800, 700));
-    
+
         // Left Panel (White)
         JPanel leftPanel = new JPanel(null);
         leftPanel.setBackground(Color.WHITE);
         leftPanel.setBounds(0, 0, 400, 700);
-    
+
         // Left panel components
         JLabel titleLabel = new JLabel("Buy Load");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setBounds(40, 40, 200, 30);
         leftPanel.add(titleLabel);
-    
+
         JLabel serviceProviderLabel = new JLabel("Select Service Provider:");
         serviceProviderLabel.setFont(new Font("Arial", Font.BOLD, 14));
         serviceProviderLabel.setBounds(40, 90, 200, 25);
         leftPanel.add(serviceProviderLabel);
-    
+
         String[] serviceProviders = {"Globe", "Smart", "TNT", "TM", "DITO"};
         JComboBox<String> serviceProviderComboBox = new JComboBox<>(serviceProviders);
         serviceProviderComboBox.setBounds(40, 120, 300, 35);
         leftPanel.add(serviceProviderComboBox);
-    
+
         JLabel methodLabel = new JLabel("Payment Method:");
         methodLabel.setFont(new Font("Arial", Font.BOLD, 14));
         methodLabel.setBounds(40, 170, 150, 25);
         leftPanel.add(methodLabel);
-    
+
         String[] methods = {"Current", "Savings", "Credit"};
         JComboBox<String> methodComboBox = new JComboBox<>(methods);
         methodComboBox.setBounds(40, 200, 300, 35);
@@ -462,27 +463,27 @@ public class Application {
         balance.setFont(new Font("Arial", Font.BOLD, 18));
         balance.setBounds(40, 270, 150, 25);
         balancePanel.add(balance);
-    
+
         // Right Panel (Yellow)
         JPanel rightPanel = new JPanel(null);
         rightPanel.setBackground(new Color(244, 226, 124));
         rightPanel.setBounds(400, 0, 400, 700);
-    
+
         JLabel phoneLabel = new JLabel("Buy Load for");
         phoneLabel.setFont(new Font("Arial", Font.BOLD, 14));
         phoneLabel.setBounds(40, 40, 200, 30);
         rightPanel.add(phoneLabel);
-    
+
         JTextField numberField = new JTextField();
         numberField.setBounds(40, 80, 300, 35);
         numberField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
         rightPanel.add(numberField);
-    
+
         JLabel amountLabel = new JLabel("Enter Amount:");
         amountLabel.setFont(new Font("Arial", Font.BOLD, 14));
         amountLabel.setBounds(40, 130, 150, 25);
         rightPanel.add(amountLabel);
-    
+
         JTextField amountField = new JTextField();
         amountField.setBounds(40, 160, 300, 35);
         amountField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
@@ -500,9 +501,9 @@ public class Application {
 
         JLabel feeNote = new JLabel("<html>Note: Transaction fee varies from <br> service provider</html>\"");
         feeNote.setFont(new Font("Arial", Font.ITALIC, 14));
-        feeNote.setBounds(40, 280, 300, 25);
+        feeNote.setBounds(40, 280, 300, 50);
         rightPanel.add(feeNote);
-    
+
         JButton loadButton = new JButton("LOAD MONEY");
         loadButton.setBounds(40, 350, 300, 40);
         loadButton.setBackground(new Color(30, 30, 30));
@@ -511,144 +512,214 @@ public class Application {
         loadButton.setOpaque(true);
         loadButton.setBorderPainted(false);
         loadButton.addActionListener(e -> {
-            String amount = amountField.getText();
-            String method = (String) methodComboBox.getSelectedItem();
-            JOptionPane.showMessageDialog(null, 
-                "Loading " + amount + " via " + method, 
-                "Buy Load", 
-                JOptionPane.INFORMATION_MESSAGE);
+            // Create the dialog
+            JDialog pinDialog = new JDialog((Frame) null, "Enter PIN", true);
+            pinDialog.setLayout(new BorderLayout());
+            pinDialog.setBackground(Color.BLACK);
+            pinDialog.setSize(300, 150);
+            pinDialog.setLocationRelativeTo(null); // Center on screen
+
+            // Create a label for instructions
+            JLabel pinLabel = new JLabel("Enter your PIN:");
+            pinLabel.setFont(new Font("Arial", Font.BOLD, 14));
+            pinLabel.setForeground(Color.BLACK);
+            pinLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            pinDialog.add(pinLabel, BorderLayout.NORTH);
+
+            // Create a PIN input field
+            JPasswordField pinField = new JPasswordField();
+            pinField.setFont(new Font("Arial", Font.BOLD, 14));
+            pinField.setDocument(new LimitedDocument(4));
+            pinDialog.add(pinField, BorderLayout.CENTER);
+
+            // Create a button panel
+            JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            JButton confirmButton = new JButton("Confirm");
+            JButton cancelButton = new JButton("Cancel");
+
+            buttonPanel.add(cancelButton);
+            buttonPanel.add(confirmButton);
+            pinDialog.add(buttonPanel, BorderLayout.SOUTH);
+
+            // Add functionality
+            confirmButton.addActionListener(event -> {
+                String pin = new String(pinField.getPassword());
+                if (pin.isEmpty()) {
+                    JOptionPane.showMessageDialog(pinDialog, "PIN cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(pinDialog, "PIN entered: " + pin, "Success", JOptionPane.INFORMATION_MESSAGE);
+                    pinDialog.dispose();
+                }
+            });
+
+            cancelButton.addActionListener(event -> pinDialog.dispose()); // Close dialog
+
+            // Show the dialog
+            pinDialog.setVisible(true);
         });
         rightPanel.add(loadButton);
-    
+
         // Add panels to main panel
         loadPanel.add(leftPanel);
         loadPanel.add(rightPanel);
-    
+
         return loadPanel;
     }
-    
-    private void createRegisterPage() {
 
+    private void createRegisterPage() {
         JFrame registerFrame = new JFrame("FEU Register Page");
         registerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        registerFrame.setSize(600, 400);
-        registerFrame.setLayout(null);
+        registerFrame.setSize(800, 700);
+        registerFrame.setBackground(Color.decode("#1B5045"));
+        registerFrame.setLayout(null); // Use null layout for manual positioning
 
-        JPanel registerPanel = new JPanel();
-        registerPanel.setLayout(null);
-        registerPanel.setBounds(0, 0, 600, 400);
+        JPanel registerPanel = new JPanel(null);
+        registerPanel.setBackground(Color.WHITE);
+        registerPanel.setBounds(0, 0, 800, 700);
 
+        // Left Panel (White background)
+        JPanel leftPanel = new JPanel(null);
+        leftPanel.setBackground(Color.WHITE);
+        leftPanel.setBounds(0, 0, 600, 700); // 600px width for the left side to accommodate all fields
+
+        // Left panel components
         JLabel registerLabel = new JLabel("Register to FEU Online");
         registerLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        registerLabel.setBounds(150, 20, 300, 40);
-        registerPanel.add(registerLabel);
+        registerLabel.setBounds(40, 40, 300, 30); // Position the label
+        leftPanel.add(registerLabel);
 
-        // Panel for First Name, Middle Name, Last Name
-        JPanel namePanel = new JPanel();
-        namePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0)); // Horizontal layout with gaps
-        namePanel.setBounds(20, 70, 560, 30); // Adjust the width as needed
+        // First Name Field
+        JLabel firstNameLabel = new JLabel("First Name:");
+        firstNameLabel.setBounds(40, 100, 100, 25);
+        JTextField firstNameField = new JTextField();
+        firstNameField.setBounds(150, 100, 300, 30);
+        leftPanel.add(firstNameLabel);
+        leftPanel.add(firstNameField);
 
-        // First Name
-        namePanel.add(createLabel("First Name", 0, 0)); // Positioning within the panel is handled by FlowLayout
-        JTextField firstNameField = createTextField(0, 0);
-        namePanel.add(firstNameField);
+        // Middle Name Field
+        JLabel middleNameLabel = new JLabel("Middle Name:");
+        middleNameLabel.setBounds(40, 140, 100, 25);
+        JTextField middleNameField = new JTextField();
+        middleNameField.setBounds(150, 140, 300, 30);
+        leftPanel.add(middleNameLabel);
+        leftPanel.add(middleNameField);
 
-        // Middle Name
-        namePanel.add(createLabel("Middle Name", 0, 0));
-        JTextField middleNameField = createTextField(0, 0);
-        namePanel.add(middleNameField);
+        // Last Name Field
+        JLabel lastNameLabel = new JLabel("Last Name:");
+        lastNameLabel.setBounds(40, 180, 100, 25);
+        JTextField lastNameField = new JTextField();
+        lastNameField.setBounds(150, 180, 300, 30);
+        leftPanel.add(lastNameLabel);
+        leftPanel.add(lastNameField);
 
-        // Last Name
-        namePanel.add(createLabel("Last Name", 0, 0));
-        JTextField lastNameField = createTextField(0, 0);
-        namePanel.add(lastNameField);
+        // Email Field
+        JLabel emailLabel = new JLabel("Email:");
+        emailLabel.setBounds(40, 220, 100, 25);
+        JTextField emailField = new JTextField();
+        emailField.setBounds(150, 220, 300, 30);
+        leftPanel.add(emailLabel);
+        leftPanel.add(emailField);
 
-        registerPanel.add(namePanel);
+        // Address Field
+        JLabel addressLabel = new JLabel("Address:");
+        addressLabel.setBounds(40, 260, 100, 25);
+        JTextField addressField = new JTextField();
+        addressField.setBounds(150, 260, 300, 30);
+        leftPanel.add(addressLabel);
+        leftPanel.add(addressField);
 
-        // Email
-        registerPanel.add(createLabel("Email", 20, 120));
-        JTextField emailField = createTextField(20, 150);
-        registerPanel.add(emailField);
+        // Birthday Section (Day, Month, Year)
+        JLabel birthdayLabel = new JLabel("Birthday:");
+        birthdayLabel.setBounds(40, 300, 100, 25);
+        leftPanel.add(birthdayLabel);
 
-        // Password
-        registerPanel.add(createLabel("Password", 20, 190));
-        JPasswordField passwordField = createPasswordField(20, 220);
-        registerPanel.add(passwordField);
+        // Day Dropdown
+        JLabel dayLabel = new JLabel("Day:");
+        dayLabel.setBounds(150, 300, 50, 25);
+        String[] days = new String[31];
+        for (int i = 0; i < 31; i++) {
+            days[i] = String.format("%02d", i + 1);
+        }
+        JComboBox<String> dayComboBox = new JComboBox<>(days);
+        dayComboBox.setBounds(200, 300, 50, 30);
 
-        // Confirm Password
-        registerPanel.add(createLabel("Confirm Password", 20, 260));
-        JPasswordField confirmPasswordField = createPasswordField(20, 290);
-        registerPanel.add(confirmPasswordField);
+        // Month Dropdown
+        JLabel monthLabel = new JLabel("Month:");
+        monthLabel.setBounds(260, 300, 50, 25);
+        String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        JComboBox<String> monthComboBox = new JComboBox<>(months);
+        monthComboBox.setBounds(310, 300, 70, 30);
 
-        // Register button
+        // Year Dropdown (Range from 1900 to current year)
+        JLabel yearLabel = new JLabel("Year:");
+        yearLabel.setBounds(390, 300, 50, 25);
+        int currentYear = LocalDate.now().getYear();
+        String[] years = new String[currentYear - 1899];
+        for (int i = 0; i < years.length; i++) {
+            years[i] = String.valueOf(currentYear - i);
+        }
+        JComboBox<String> yearComboBox = new JComboBox<>(years);
+        yearComboBox.setBounds(440, 300, 70, 30);
+
+        leftPanel.add(dayLabel);
+        leftPanel.add(dayComboBox);
+        leftPanel.add(monthLabel);
+        leftPanel.add(monthComboBox);
+        leftPanel.add(yearLabel);
+        leftPanel.add(yearComboBox);
+
+        // Password Field
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setBounds(40, 340, 100, 25);
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setBounds(150, 340, 300, 30);
+        leftPanel.add(passwordLabel);
+        leftPanel.add(passwordField);
+
+        // Confirm Password Field
+        JLabel confirmPasswordLabel = new JLabel("Confirm Password:");
+        confirmPasswordLabel.setBounds(40, 380, 150, 25);
+        JPasswordField confirmPasswordField = new JPasswordField();
+        confirmPasswordField.setBounds(150, 380, 300, 30);
+        leftPanel.add(confirmPasswordLabel);
+        leftPanel.add(confirmPasswordField);
+
+        // PIN Field
+        JLabel pinLabel = new JLabel("PIN:");
+        pinLabel.setBounds(40, 420, 100, 25);
+        JPasswordField pinField = new JPasswordField();
+        pinField.setBounds(150, 420, 300, 30);
+        pinField.setDocument(new LimitedDocument(4)); // Limiting to 4 digits for PIN
+        leftPanel.add(pinLabel);
+        leftPanel.add(pinField);
+
+        // Register Button
         JButton registerButton = new JButton("REGISTER");
-        registerButton.setBounds(20, 330, 150, 40);
-        registerButton.setBackground(Color.RED);
+        registerButton.setBounds(100, 480, 300, 40);
+        registerButton.setBackground(new Color(30, 30, 30));
         registerButton.setForeground(Color.WHITE);
         registerButton.setFont(new Font("Arial", Font.BOLD, 14));
         registerButton.setOpaque(true);
-        registerButton.setContentAreaFilled(false);
         registerButton.setBorderPainted(false);
         registerButton.addActionListener(e -> {
-            String firstName = firstNameField.getText();
-            String middleName = middleNameField.getText();
-            String lastName = lastNameField.getText();
-            String email = emailField.getText();
-            String password = new String(passwordField.getPassword());
-            String confirmPassword = new String(confirmPasswordField.getPassword());
-
-            if (!password.equals(confirmPassword)) {
-                JOptionPane.showMessageDialog(registerFrame, "Passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-                // dummy registration logic
-                System.out.println("Registered First Name: " + firstName);
-                System.out.println("Registered Middle Name: " + middleName);
-                System.out.println("Registered Last Name: " + lastName);
-                System.out.println("Registered Email: " + email);
-                System.out.println("Registered Password: " + password);
-                JOptionPane.showMessageDialog(registerFrame, "Registration successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
-
-                // Show success frame
-                JFrame successFrame = new JFrame("Registration Successful");
-                successFrame.setSize(400, 200);
-                successFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                successFrame.setLayout(null);
-
-                JPanel successPanel = new JPanel();
-                successPanel.setLayout(null);
-                successPanel.setBackground(Color.decode("#C4FFA9"));
-
-                JLabel successLabel = new JLabel("Registration Successful!");
-                successLabel.setFont(new Font("Arial", Font.BOLD, 24));
-                successLabel.setBounds(50, 50, 300, 40);
-                successLabel.setForeground(Color.BLACK);
-                successPanel.add(successLabel);
-
-                JButton loginButton = new JButton("GO BACK TO LOGIN");
-                loginButton.setBounds(100, 100, 200, 40);
-                loginButton.setBackground(Color.BLACK);
-                loginButton.setForeground(Color.WHITE);
-                loginButton.setFont(new Font("Arial", Font.BOLD, 14));
-                loginButton.setOpaque(true);
-                loginButton.setContentAreaFilled(false);
-                loginButton.setBorderPainted(false);
-                loginButton.addActionListener(e2 -> {
-                    successFrame.setVisible(false);
-                    registerFrame.dispose(); // Close the registration frame
-                    createLoginFrame(); // Go back to log in screen
-
-                });
-                successPanel.add(loginButton);
-
-                successFrame.add(successPanel);
-                successFrame.setVisible(true);
-            }
+            // Add action listener code here
         });
-        registerPanel.add(registerButton);
+        leftPanel.add(registerButton);
 
+        // Right Panel (Green background, adjusted to 200px width)
+        JPanel rightPanel = new JPanel(null);
+        rightPanel.setBackground(new Color(244, 226, 124)); // Yellow background or green
+        rightPanel.setBounds(600, 0, 200, 700); // Adjusted right panel width to 200px
+
+        // Add the left panel and right panel to the main panel
+        registerPanel.add(leftPanel);
+        registerPanel.add(rightPanel);
+
+        // Add the main panel to the frame
         registerFrame.add(registerPanel);
         registerFrame.setVisible(true);
     }
+
 
     private JLabel createLabel(String text, int x, int y) {
         JLabel label = new JLabel(text);
