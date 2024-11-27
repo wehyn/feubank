@@ -35,6 +35,11 @@ public class BankAccountClass {
             return (username.equals(this.username) || username.equals(this.email)) && this.password.equals(inputPassword);
         }
 
+
+        public ArrayList<Transaction> getTransactions() {
+            return this.transactions;
+        }
+
         private String getAccountNumber() {
             return this.accountNumber;
         }
@@ -70,12 +75,14 @@ public class BankAccountClass {
 
             Transaction senderTransaction = new Transaction();
             senderTransaction.accountNumber = this.accountNumber;
+            senderTransaction.details = "Send Money";
             senderTransaction.date = java.time.LocalDate.now().toString();
             senderTransaction.recipient = recipient.accountNumber;
             senderTransaction.amount = -amount;
 
             Transaction recipientTransaction = new Transaction();
             recipientTransaction.accountNumber = recipient.accountNumber;
+            recipientTransaction.details = "Send Money";
             recipientTransaction.date = java.time.LocalDate.now().toString();
             recipientTransaction.recipient = this.accountNumber;
             recipientTransaction.amount = amount;
@@ -86,12 +93,12 @@ public class BankAccountClass {
             return true;
         }
 
-        // Need more getters and setters
 
     }
 
     public static class Transaction {
         String accountNumber;
+        String details;
         String date;
         String recipient;
         double amount;
