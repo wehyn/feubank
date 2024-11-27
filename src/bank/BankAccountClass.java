@@ -47,23 +47,23 @@ public class BankAccountClass {
             return "FEU-" + randomNumber;
         }
 
-        private String getAccountNumber() {
+        public String getAccountNumber() {
             return this.accountNumber;
         }
 
-        private double getBalance() {
+        public double getBalance() {
             return this.balance;
         }
 
-        private String getUsername() {
+        public String getUsername() {
             return this.username;
         }
 
-        private String getBirthday() {
+        public String getBirthday() {
             return this.birthday;
         }
 
-        private String getEmail() {
+        public String getEmail() {
             return this.email;
         }
 
