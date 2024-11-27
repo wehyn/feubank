@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.logging.LoggingPermission;
@@ -501,9 +500,9 @@ public class Application {
 
         JLabel feeNote = new JLabel("<html>Note: Transaction fee varies from <br> service provider</html>\"");
         feeNote.setFont(new Font("Arial", Font.ITALIC, 14));
-        feeNote.setBounds(40, 280, 300, 50);
+        feeNote.setBounds(40, 280, 300, 25);
         rightPanel.add(feeNote);
-
+    
         JButton loadButton = new JButton("LOAD MONEY");
         loadButton.setBounds(40, 350, 300, 40);
         loadButton.setBackground(new Color(30, 30, 30));
@@ -512,50 +511,12 @@ public class Application {
         loadButton.setOpaque(true);
         loadButton.setBorderPainted(false);
         loadButton.addActionListener(e -> {
-            // Create the dialog
-            JDialog pinDialog = new JDialog((Frame) null, "Enter PIN", true);
-            pinDialog.setLayout(new BorderLayout());
-            pinDialog.setBackground(Color.BLACK);
-            pinDialog.setSize(300, 150);
-            pinDialog.setLocationRelativeTo(null); // Center on screen
-
-            // Create a label for instructions
-            JLabel pinLabel = new JLabel("Enter your PIN:");
-            pinLabel.setFont(new Font("Arial", Font.BOLD, 14));
-            pinLabel.setForeground(Color.BLACK);
-            pinLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            pinDialog.add(pinLabel, BorderLayout.NORTH);
-
-            // Create a PIN input field
-            JPasswordField pinField = new JPasswordField();
-            pinField.setFont(new Font("Arial", Font.BOLD, 14));
-            pinField.setDocument(new LimitedDocument(4));
-            pinDialog.add(pinField, BorderLayout.CENTER);
-
-            // Create a button panel
-            JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JButton confirmButton = new JButton("Confirm");
-            JButton cancelButton = new JButton("Cancel");
-
-            buttonPanel.add(cancelButton);
-            buttonPanel.add(confirmButton);
-            pinDialog.add(buttonPanel, BorderLayout.SOUTH);
-
-            // Add functionality
-            confirmButton.addActionListener(event -> {
-                String pin = new String(pinField.getPassword());
-                if (pin.isEmpty()) {
-                    JOptionPane.showMessageDialog(pinDialog, "PIN cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(pinDialog, "PIN entered: " + pin, "Success", JOptionPane.INFORMATION_MESSAGE);
-                    pinDialog.dispose();
-                }
-            });
-
-            cancelButton.addActionListener(event -> pinDialog.dispose()); // Close dialog
-
-            // Show the dialog
-            pinDialog.setVisible(true);
+            String amount = amountField.getText();
+            String method = (String) methodComboBox.getSelectedItem();
+            JOptionPane.showMessageDialog(null, 
+                "Loading " + amount + " via " + method, 
+                "Buy Load", 
+                JOptionPane.INFORMATION_MESSAGE);
         });
         rightPanel.add(loadButton);
     
@@ -565,161 +526,129 @@ public class Application {
     
         return loadPanel;
     }
-
+    
     private void createRegisterPage() {
+
         JFrame registerFrame = new JFrame("FEU Register Page");
         registerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        registerFrame.setSize(800, 700);
-        registerFrame.setBackground(Color.decode("#1B5045"));
-        registerFrame.setLayout(null); // Use null layout for manual positioning
+        registerFrame.setSize(600, 400);
+        registerFrame.setLayout(null);
 
-        JPanel registerPanel = new JPanel(null);
-        registerPanel.setBackground(Color.WHITE);
-        registerPanel.setBounds(0, 0, 800, 700);
+        JPanel registerPanel = new JPanel();
+        registerPanel.setLayout(null);
+        registerPanel.setBounds(0, 0, 600, 400);
 
-        // Left Panel (White background)
-        JPanel leftPanel = new JPanel(null);
-        leftPanel.setBackground(Color.WHITE);
-        leftPanel.setBounds(0, 0, 600, 700); // 600px width for the left side to accommodate all fields
-
-        // Left panel components
         JLabel registerLabel = new JLabel("Register to FEU Online");
         registerLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        registerLabel.setBounds(40, 40, 300, 30); // Position the label
-        leftPanel.add(registerLabel);
+        registerLabel.setBounds(150, 20, 300, 40);
+        registerPanel.add(registerLabel);
 
-        // First Name Field
-        JLabel firstNameLabel = new JLabel("First Name:");
-        firstNameLabel.setBounds(40, 100, 100, 25);
-        JTextField firstNameField = new JTextField();
-        firstNameField.setBounds(150, 100, 300, 30);
-        leftPanel.add(firstNameLabel);
-        leftPanel.add(firstNameField);
+        // Panel for First Name, Middle Name, Last Name
+        JPanel namePanel = new JPanel();
+        namePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0)); // Horizontal layout with gaps
+        namePanel.setBounds(20, 70, 560, 30); // Adjust the width as needed
 
-        // Middle Name Field
-        JLabel middleNameLabel = new JLabel("Middle Name:");
-        middleNameLabel.setBounds(40, 140, 100, 25);
-        JTextField middleNameField = new JTextField();
-        middleNameField.setBounds(150, 140, 300, 30);
-        leftPanel.add(middleNameLabel);
-        leftPanel.add(middleNameField);
+        // First Name
+        namePanel.add(createLabel("First Name", 0, 0)); // Positioning within the panel is handled by FlowLayout
+        JTextField firstNameField = createTextField(0, 0);
+        namePanel.add(firstNameField);
 
-        // Last Name Field
-        JLabel lastNameLabel = new JLabel("Last Name:");
-        lastNameLabel.setBounds(40, 180, 100, 25);
-        JTextField lastNameField = new JTextField();
-        lastNameField.setBounds(150, 180, 300, 30);
-        leftPanel.add(lastNameLabel);
-        leftPanel.add(lastNameField);
+        // Middle Name
+        namePanel.add(createLabel("Middle Name", 0, 0));
+        JTextField middleNameField = createTextField(0, 0);
+        namePanel.add(middleNameField);
 
-        // Email Field
-        JLabel emailLabel = new JLabel("Email:");
-        emailLabel.setBounds(40, 220, 100, 25);
-        JTextField emailField = new JTextField();
-        emailField.setBounds(150, 220, 300, 30);
-        leftPanel.add(emailLabel);
-        leftPanel.add(emailField);
+        // Last Name
+        namePanel.add(createLabel("Last Name", 0, 0));
+        JTextField lastNameField = createTextField(0, 0);
+        namePanel.add(lastNameField);
 
-        // Address Field
-        JLabel addressLabel = new JLabel("Address:");
-        addressLabel.setBounds(40, 260, 100, 25);
-        JTextField addressField = new JTextField();
-        addressField.setBounds(150, 260, 300, 30);
-        leftPanel.add(addressLabel);
-        leftPanel.add(addressField);
+        registerPanel.add(namePanel);
 
-        // Birthday Section (Day, Month, Year)
-        JLabel birthdayLabel = new JLabel("Birthday:");
-        birthdayLabel.setBounds(40, 300, 100, 25);
-        leftPanel.add(birthdayLabel);
+        // Email
+        registerPanel.add(createLabel("Email", 20, 120));
+        JTextField emailField = createTextField(20, 150);
+        registerPanel.add(emailField);
 
-        // Day Dropdown
-        JLabel dayLabel = new JLabel("Day:");
-        dayLabel.setBounds(150, 300, 50, 25);
-        String[] days = new String[31];
-        for (int i = 0; i < 31; i++) {
-            days[i] = String.format("%02d", i + 1);
-        }
-        JComboBox<String> dayComboBox = new JComboBox<>(days);
-        dayComboBox.setBounds(200, 300, 50, 30);
+        // Password
+        registerPanel.add(createLabel("Password", 20, 190));
+        JPasswordField passwordField = createPasswordField(20, 220);
+        registerPanel.add(passwordField);
 
-        // Month Dropdown
-        JLabel monthLabel = new JLabel("Month:");
-        monthLabel.setBounds(260, 300, 50, 25);
-        String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-        JComboBox<String> monthComboBox = new JComboBox<>(months);
-        monthComboBox.setBounds(310, 300, 70, 30);
+        // Confirm Password
+        registerPanel.add(createLabel("Confirm Password", 20, 260));
+        JPasswordField confirmPasswordField = createPasswordField(20, 290);
+        registerPanel.add(confirmPasswordField);
 
-        // Year Dropdown (Range from 1900 to current year)
-        JLabel yearLabel = new JLabel("Year:");
-        yearLabel.setBounds(390, 300, 50, 25);
-        int currentYear = LocalDate.now().getYear();
-        String[] years = new String[currentYear - 1899];
-        for (int i = 0; i < years.length; i++) {
-            years[i] = String.valueOf(currentYear - i);
-        }
-        JComboBox<String> yearComboBox = new JComboBox<>(years);
-        yearComboBox.setBounds(440, 300, 70, 30);
-
-        leftPanel.add(dayLabel);
-        leftPanel.add(dayComboBox);
-        leftPanel.add(monthLabel);
-        leftPanel.add(monthComboBox);
-        leftPanel.add(yearLabel);
-        leftPanel.add(yearComboBox);
-
-        // Password Field
-        JLabel passwordLabel = new JLabel("Password:");
-        passwordLabel.setBounds(40, 340, 100, 25);
-        JPasswordField passwordField = new JPasswordField();
-        passwordField.setBounds(150, 340, 300, 30);
-        leftPanel.add(passwordLabel);
-        leftPanel.add(passwordField);
-
-        // Confirm Password Field
-        JLabel confirmPasswordLabel = new JLabel("Confirm Password:");
-        confirmPasswordLabel.setBounds(40, 380, 150, 25);
-        JPasswordField confirmPasswordField = new JPasswordField();
-        confirmPasswordField.setBounds(150, 380, 300, 30);
-        leftPanel.add(confirmPasswordLabel);
-        leftPanel.add(confirmPasswordField);
-
-        // PIN Field
-        JLabel pinLabel = new JLabel("PIN:");
-        pinLabel.setBounds(40, 420, 100, 25);
-        JPasswordField pinField = new JPasswordField();
-        pinField.setBounds(150, 420, 300, 30);
-        pinField.setDocument(new LimitedDocument(4)); // Limiting to 4 digits for PIN
-        leftPanel.add(pinLabel);
-        leftPanel.add(pinField);
-
-        // Register Button
+        // Register button
         JButton registerButton = new JButton("REGISTER");
-        registerButton.setBounds(100, 480, 300, 40);
-        registerButton.setBackground(new Color(30, 30, 30));
+        registerButton.setBounds(20, 330, 150, 40);
+        registerButton.setBackground(Color.RED);
         registerButton.setForeground(Color.WHITE);
         registerButton.setFont(new Font("Arial", Font.BOLD, 14));
         registerButton.setOpaque(true);
+        registerButton.setContentAreaFilled(false);
         registerButton.setBorderPainted(false);
         registerButton.addActionListener(e -> {
-            // Add action listener code here
+            String firstName = firstNameField.getText();
+            String middleName = middleNameField.getText();
+            String lastName = lastNameField.getText();
+            String email = emailField.getText();
+            String password = new String(passwordField.getPassword());
+            String confirmPassword = new String(confirmPasswordField.getPassword());
+
+            if (!password.equals(confirmPassword)) {
+                JOptionPane.showMessageDialog(registerFrame, "Passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                // dummy registration logic
+                System.out.println("Registered First Name: " + firstName);
+                System.out.println("Registered Middle Name: " + middleName);
+                System.out.println("Registered Last Name: " + lastName);
+                System.out.println("Registered Email: " + email);
+                System.out.println("Registered Password: " + password);
+                JOptionPane.showMessageDialog(registerFrame, "Registration successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                // Show success frame
+                JFrame successFrame = new JFrame("Registration Successful");
+                successFrame.setSize(400, 200);
+                successFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                successFrame.setLayout(null);
+
+                JPanel successPanel = new JPanel();
+                successPanel.setLayout(null);
+                successPanel.setBackground(Color.decode("#C4FFA9"));
+
+                JLabel successLabel = new JLabel("Registration Successful!");
+                successLabel.setFont(new Font("Arial", Font.BOLD, 24));
+                successLabel.setBounds(50, 50, 300, 40);
+                successLabel.setForeground(Color.BLACK);
+                successPanel.add(successLabel);
+
+                JButton loginButton = new JButton("GO BACK TO LOGIN");
+                loginButton.setBounds(100, 100, 200, 40);
+                loginButton.setBackground(Color.BLACK);
+                loginButton.setForeground(Color.WHITE);
+                loginButton.setFont(new Font("Arial", Font.BOLD, 14));
+                loginButton.setOpaque(true);
+                loginButton.setContentAreaFilled(false);
+                loginButton.setBorderPainted(false);
+                loginButton.addActionListener(e2 -> {
+                    successFrame.setVisible(false);
+                    registerFrame.dispose(); // Close the registration frame
+                    createLoginFrame(); // Go back to log in screen
+
+                });
+                successPanel.add(loginButton);
+
+                successFrame.add(successPanel);
+                successFrame.setVisible(true);
+            }
         });
-        leftPanel.add(registerButton);
+        registerPanel.add(registerButton);
 
-        // Right Panel (Green background, adjusted to 200px width)
-        JPanel rightPanel = new JPanel(null);
-        rightPanel.setBackground(new Color(244, 226, 124)); // Yellow background or green
-        rightPanel.setBounds(600, 0, 200, 700); // Adjusted right panel width to 200px
-
-        // Add the left panel and right panel to the main panel
-        registerPanel.add(leftPanel);
-        registerPanel.add(rightPanel);
-
-        // Add the main panel to the frame
         registerFrame.add(registerPanel);
         registerFrame.setVisible(true);
     }
-
 
     private JLabel createLabel(String text, int x, int y) {
         JLabel label = new JLabel(text);
