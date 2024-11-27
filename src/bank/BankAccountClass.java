@@ -1,6 +1,7 @@
 package bank;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class BankAccountClass {
     public static class UserAccount {
@@ -17,8 +18,8 @@ public class BankAccountClass {
         String pin;
         ArrayList<Transaction> transactions = new ArrayList<>();
 
-        public UserAccount(String accountNumber, String firstName, String middleName, String lastName, String email, String birthday, String address, double balance, String password, String pin) {
-            this.accountNumber = accountNumber;
+        public UserAccount(String firstName, String middleName, String lastName, String email, String birthday, String address, double balance, String password, String pin) {
+            this.accountNumber = generateAccountNumber();
             this.username = (String.valueOf(firstName.charAt(0)) + middleName.charAt(0) + lastName).toLowerCase();
             this.firstName = firstName;
             this.middleName = middleName;
@@ -38,6 +39,12 @@ public class BankAccountClass {
 
         public ArrayList<Transaction> getTransactions() {
             return this.transactions;
+        }
+
+        private String generateAccountNumber() {
+            Random random = new Random();
+            int randomNumber = 1000 + random.nextInt(9000); // Generates a random number between 1000 and 9999
+            return "FEU-" + randomNumber;
         }
 
         private String getAccountNumber() {
