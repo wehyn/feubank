@@ -33,6 +33,15 @@ public class Authentication {
 
     }
 
+    public BankAccountClass.UserAccount findAccountNumber(String accountNumber) {
+        for (BankAccountClass.UserAccount account : accounts) {
+            if (account.getAccountNumber().equals(accountNumber)) {
+                return account;
+            }
+        }
+        return null;
+    }
+
     public void addUser(BankAccountClass.UserAccount newUser) {
         accounts.add(newUser);
     }
