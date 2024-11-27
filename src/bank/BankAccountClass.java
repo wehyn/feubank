@@ -60,12 +60,53 @@ public class BankAccountClass {
             return this.email;
         }
 
+        public boolean buyLoad(String number, double amount, String serviceProvider) {
+            double transactionFee = 1;
+
+            if (amount <= 0) {
+                System.out.println("1");
+                return false;
+            }
+
+            if (this.balance < 0) {
+                System.out.println("2");
+                return false;
+            }
+
+            if (this.balance < amount + transactionFee) {
+                System.out.println("3");
+                return false;
+            }
+
+            if (number.length() != 11){
+                System.out.println("4");
+                return false;
+            }
+
+            this.balance -= amount + transactionFee;
+
+            Transaction buyLoad = new Transaction();
+            buyLoad.accountNumber = this.accountNumber;
+            buyLoad.details = "Buy Load " + serviceProvider;
+            buyLoad.amount = -amount;
+            buyLoad.recipient = "FEU Bank";
+            buyLoad.date = java.time.LocalDate.now().toString();
+            return true;
+
+        }
+
+
+
         public boolean transferMoney(UserAccount recipient, double amount) {
             if (amount <= 0) {
                 return false;
             }
 
             if (this.balance < 0) {
+                return false;
+            }
+
+            if (this.balance < amount) {
                 return false;
             }
 
