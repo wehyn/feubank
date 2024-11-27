@@ -703,6 +703,20 @@ public class Application {
         registerButton.setBorderPainted(false);
         registerButton.addActionListener(e -> {
             // Add action listener code here
+            String firstName = firstNameField.getText();
+            String middleName = middleNameField.getText();
+            String lastName = lastNameField.getText();
+            String email = emailField.getText();
+            String address = addressField.getText();
+            String birthday = dayComboBox.getSelectedItem() + " " + monthComboBox.getSelectedItem() + " " + yearComboBox.getSelectedItem();
+            String password = new String(passwordField.getPassword());
+            String confirmPassword = new String(confirmPasswordField.getPassword());
+            String pin = new String(pinField.getPassword());
+
+            BankAccountClass.UserAccount newUser = new BankAccountClass.UserAccount(firstName, middleName, lastName, email, birthday, address, 0, password, pin);
+            authentication.addUser(newUser);
+            registerFrame.dispose();
+
         });
         leftPanel.add(registerButton);
 
