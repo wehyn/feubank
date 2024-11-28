@@ -270,7 +270,7 @@ public class Application {
             case "home" -> createHomeContent();
             case "load" -> createLoadContent();
             //case "transfer" -> createTransferPage();
-            //case "bills" -> createBillsPage();
+            case "loan" -> createloanPage();
             default -> panel;
         };
     }
@@ -406,8 +406,134 @@ public class Application {
     //private JPanel createTransferPage(){
     //}
 
-    //private JPanel createBillsPage(){
-    //}
+    private JPanel createloanPage() {
+        BankAccountClass.UserAccount user = authentication.getLoggedInAccount();
+    
+        JPanel loanPanel = new JPanel(null);
+        loanPanel.setBackground(Color.WHITE);
+        loanPanel.setPreferredSize(new Dimension(800, 700));
+    
+        // Left Panel (White)
+        JPanel leftPanel = new JPanel(null);
+        leftPanel.setBackground(Color.WHITE);
+        leftPanel.setBounds(0, 0, 400, 700);
+    
+        // Title Label
+        JLabel titleLabel = new JLabel("Loan Request");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setBounds(40, 40, 200, 30);
+        leftPanel.add(titleLabel);
+    
+        // Loan Amount Label
+        JLabel loanLabel = new JLabel("Enter Loan Amount ($):");
+        loanLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        loanLabel.setBounds(40, 100, 200, 25);
+        leftPanel.add(loanLabel);
+    
+        // Loan Amount Text Field
+        JTextField loanAmountField = new JTextField(15);
+        loanAmountField.setBounds(40, 130, 300, 35);
+        loanAmountField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
+        leftPanel.add(loanAmountField);
+    
+        // Right Panel (Yellow)
+        JPanel rightPanel = new JPanel(null);
+        rightPanel.setBackground(new Color(244, 226, 124));
+        rightPanel.setBounds(400, 0, 400, 700);
+    
+        // Submit Button
+        JButton submitButton = new JButton("Submit Loan Request");
+        submitButton.setBounds(40, 350, 300, 40);
+        submitButton.setBackground(new Color(30, 30, 30));
+        submitButton.setForeground(Color.WHITE);
+        submitButton.setFont(new Font("Arial", Font.BOLD, 14));
+        submitButton.setOpaque(true);
+        submitButton.setBorderPainted(false);
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String loanAmount = loanAmountField.getText();
+                
+                // Validate input
+                try {
+                    double amount = Double.parseDouble(loanAmount);
+                    if (amount <= 0) {
+                        JOptionPane.showMessageDialog(loanPanel, 
+                            "Please enter a valid loan amount.", 
+                            "Invalid Input", 
+                            JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    
+                    // Create PIN Dialog
+                    JDialog pinDialog = new JDialog((Frame) null, "Enter PIN", true);
+                    pinDialog.setLayout(new BorderLayout());
+                    pinDialog.setBackground(Color.WHITE);
+                    pinDialog.setSize(300, 150);
+                    pinDialog.setLocationRelativeTo(null);
+    
+                    JLabel pinLabel = new JLabel("Enter your PIN to confirm loan request:");
+                    pinLabel.setFont(new Font("Arial", Font.BOLD, 14));
+                    pinLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                    pinDialog.add(pinLabel, BorderLayout.NORTH);
+    
+                    JPasswordField pinField = new JPasswordField();
+                    pinField.setFont(new Font("Arial", Font.BOLD, 14));
+                    pinField.setDocument(new LimitedDocument(4));
+                    pinDialog.add(pinField, BorderLayout.CENTER);
+    
+                    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+                    JButton confirmButton = new JButton("Confirm");
+                    JButton cancelButton = new JButton("Cancel");
+    
+                    buttonPanel.add(cancelButton);
+                    buttonPanel.add(confirmButton);
+                    pinDialog.add(buttonPanel, BorderLayout.SOUTH);
+    
+                    confirmButton.addActionListener(pinEvent -> {
+                        String pin = new String(pinField.getPassword());
+                        if (pin.isEmpty()) {
+                            JOptionPane.showMessageDialog(pinDialog, "PIN cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            // Create loan confirmation frame
+                            JOptionPane.showMessageDialog(pinDialog, 
+                                "Your loan request for $" + amount + " has been submitted.\n" +
+                                "You will receive an email notification about the status.", 
+                                "Loan Request Submitted", 
+                                JOptionPane.INFORMATION_MESSAGE);
+                            pinDialog.dispose();
+                        }
+                    });
+    
+                    cancelButton.addActionListener(pinEvent -> pinDialog.dispose());
+    
+                    pinDialog.setVisible(true);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(loanPanel, 
+                        "Please enter a valid number.", 
+                        "Invalid Input", 
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        rightPanel.add(submitButton);
+    
+        // Additional loan information
+        JLabel infoLabel = new JLabel("<html>Loan Request Guidelines:<br>" +
+            "• Minimum loan amount: $1,000<br>" +
+            "• Maximum loan amount: $50,000<br>" +
+            "• Interest rates vary based on amount and credit score<br>" +
+            "• Approval subject to credit check</html>");
+        infoLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        infoLabel.setBounds(40, 200, 300, 150);
+        rightPanel.add(infoLabel);
+    
+        // Add panels to main panel
+        loanPanel.add(leftPanel);
+        loanPanel.add(rightPanel);
+    
+        return loanPanel;
+    }
 
 
     private JPanel createLoadContent() {
