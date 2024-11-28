@@ -22,7 +22,7 @@ public class Application {
     private Authentication authentication;
 
     private CardLayout cardLayout;
-    private JPanel mainPanel;
+    private JPanel mainContentCards;
 
     public Application() {
         authentication = new Authentication();
@@ -172,8 +172,8 @@ public class Application {
         frame.setLayout(new BorderLayout());
 
         // Create CardLayout for main content
-        CardLayout cardLayout = new CardLayout();
-        JPanel mainContentCards = new JPanel(cardLayout);
+        cardLayout = new CardLayout();
+        mainContentCards = new JPanel(cardLayout);
         mainContentCards.setBackground(Color.WHITE);
 
         // Sidebar
@@ -831,12 +831,20 @@ public class Application {
 
             // Add functionality
             confirmButton.addActionListener(event -> {
+
+                String number = numberField.getText();
+                String amount = amountField.getText();
+                String serviceProvider = (String) serviceProviderComboBox.getSelectedItem();
+
                 String pin = new String(pinField.getPassword());
                 if (pin.isEmpty()) {
                     JOptionPane.showMessageDialog(pinDialog, "PIN cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(pinDialog, "PIN entered: " + pin, "Success", JOptionPane.INFORMATION_MESSAGE);
                     pinDialog.dispose();
+
+                    user.buyLoad(number, Double.parseDouble(amount), serviceProvider);
+                    balance.setText("P" + user.balance);
                 }
             });
 
