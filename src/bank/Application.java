@@ -296,7 +296,7 @@ public class Application {
         return switch (type) {
             case "home" -> createHomeContent();
             case "load" -> createLoadContent();
-            //case "transfer" -> createTransferPage();
+            case "transfer" -> createTransferPage();
             case "loan" -> createloanPage();
             default -> panel;
         };
@@ -430,8 +430,123 @@ public class Application {
         return homePanel;
     }
 
-    //private JPanel createTransferPage(){
-    //}
+    private JPanel createTransferPage(){
+
+        BankAccountClass.UserAccount user = authentication.getLoggedInAccount();
+
+        JPanel transferPanel = new JPanel(null);
+        transferPanel.setBackground(Color.WHITE);
+        transferPanel.setPreferredSize(new Dimension(800, 700));
+
+        // Left Panel (White)
+        JPanel leftPanel = new JPanel(null);
+        leftPanel.setBackground(Color.WHITE);
+        leftPanel.setBounds(0, 0, 400, 700);
+
+        JLabel titleLabel = new JLabel("Transfer Money");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setBounds(40, 40, 200, 30);
+        leftPanel.add(titleLabel);
+
+        JLabel chooseAccLabel = new JLabel("Choose which account to transfer:");
+        chooseAccLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        chooseAccLabel.setBounds(40, 90, 300, 25);
+        leftPanel.add(chooseAccLabel);
+
+        String[] methods = {"FEU Account Transfer", "Other Bank Account Transfer"};
+        JComboBox<String> methodComboBox = new JComboBox<>(methods);
+        methodComboBox.setBounds(40, 120, 300, 35);
+        leftPanel.add(methodComboBox);
+
+        JLabel accountNameLabel = new JLabel("Account Name:");
+        accountNameLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        accountNameLabel.setBounds(40, 170, 200, 25);
+        leftPanel.add(accountNameLabel);
+
+        JTextField accountNameField = new JTextField();
+        accountNameField.setBackground(new Color(255, 255, 255));
+        accountNameField.setOpaque(true);
+        accountNameField.setBounds(40, 200, 300, 35);
+        accountNameField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
+        leftPanel.add(accountNameField);
+
+        JLabel accountNumberLabel = new JLabel("Account Number:");
+        accountNumberLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        accountNumberLabel.setBounds(40, 250, 150, 25);
+        leftPanel.add(accountNumberLabel);
+
+        JTextField accountNumberField = new JTextField();
+        accountNumberField.setBackground(new Color(255, 255, 255));
+        accountNumberField.setOpaque(true);
+        accountNumberField.setBounds(40, 280, 300, 35);
+        accountNumberField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
+        leftPanel.add(accountNumberField);
+
+        // Right Panel (Yellow)
+        JPanel rightPanel = new JPanel(null);
+        rightPanel.setBackground(new Color(244, 226, 124));
+        rightPanel.setBounds(400, 0, 400, 700);
+
+        JLabel availAmountLabel = new JLabel("Available Amount");
+        availAmountLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        availAmountLabel.setBounds(40, 40, 200, 30);
+        rightPanel.add(availAmountLabel);
+
+        JLabel balanceLabel = new JLabel("P " + user.balance);
+        balanceLabel.setFont(new Font("Arial", Font.BOLD, 48));
+        balanceLabel.setBounds(40, 80, 200, 48);
+        rightPanel.add(balanceLabel);
+
+        JLabel enterAmountLabel = new JLabel("Enter Amount:");
+        enterAmountLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        enterAmountLabel.setBounds(40, 170, 150, 25);
+        rightPanel.add(enterAmountLabel);
+
+        JTextField amountField = new JTextField();
+        amountField.setBackground(new Color(255, 255, 255));
+        amountField.setOpaque(true);
+        amountField.setBounds(40, 200, 300, 35);
+        amountField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
+        rightPanel.add(amountField);
+
+        JLabel feeLabel = new JLabel("Fee:");
+        feeLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        feeLabel.setBounds(40, 250, 150, 25);
+        rightPanel.add(feeLabel);
+
+        JLabel feeAmountLabel = new JLabel("P 0.0");
+        feeAmountLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        feeAmountLabel.setBounds(40, 270, 150, 25);
+        rightPanel.add(feeAmountLabel);
+
+        JLabel feeNoteLabel = new JLabel("Note: No transfer fee for FEU Bank Account");
+        feeNoteLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        feeNoteLabel.setBounds(40, 300, 400, 25);
+        rightPanel.add(feeNoteLabel);
+
+        JButton ProceedButton = new JButton("PROCEED");
+        ProceedButton.setBounds(40, 330, 300, 40);
+        ProceedButton.setBackground(new Color(30, 30, 30));
+        ProceedButton.setForeground(Color.WHITE);
+        ProceedButton.setFont(new Font("Arial", Font.BOLD, 14));
+        ProceedButton.setOpaque(true);
+        ProceedButton.setBorderPainted(false);
+        ProceedButton.addActionListener(e -> {
+            String accName = accountNameField.getText();
+            String accNum = accountNumberField.getText();
+            String amount = amountField.getText();
+            JOptionPane.showMessageDialog(null,
+                    "Transferred P " + amount + " to " + accName + ", " + accNum,
+                    "SUCCESS",
+                    JOptionPane.INFORMATION_MESSAGE);
+        });
+        rightPanel.add(ProceedButton);
+
+        transferPanel.add(leftPanel);
+        transferPanel.add(rightPanel);
+
+        return transferPanel;
+    }
 
     private JPanel createloanPage() {
         BankAccountClass.UserAccount user = authentication.getLoggedInAccount();
