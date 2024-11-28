@@ -452,7 +452,7 @@ public class Application {
         leftPanel.add(titleLabel);
     
         // Loan Amount Label
-        JLabel loanLabel = new JLabel("Enter Loan Amount ($):");
+        JLabel loanLabel = new JLabel("Enter Loan Amount (P):");
         loanLabel.setFont(new Font("Arial", Font.BOLD, 14));
         loanLabel.setBounds(40, 100, 200, 25);
         leftPanel.add(loanLabel);
@@ -547,8 +547,8 @@ public class Application {
     
         // Additional loan information
         JLabel infoLabel = new JLabel("<html>Loan Request Guidelines:<br>" +
-            "• Minimum loan amount: $1,000<br>" +
-            "• Maximum loan amount: $50,000<br>" +
+            "• Minimum loan amount: P1,000<br>" +
+            "• Maximum loan amount: P50,000<br>" +
             "• Interest rates vary based on amount and credit score<br>" +
             "• Approval subject to credit check</html>");
         infoLabel.setFont(new Font("Arial", Font.PLAIN, 12));
