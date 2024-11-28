@@ -117,7 +117,13 @@ public class Application {
                 if (authentication.authenticate(username, password)) {
                     // Login successful, open home page
                     frame.setVisible(false);  // Hide login frame
-                    createHomePage();        // Show home page
+                    try {
+                        createHomePage();        // Show home page
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    } catch (FontFormatException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(frame, "Invalid credentials.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -126,11 +132,11 @@ public class Application {
         rightPanel.add(loginButton);
 
         // Forgot password label
-        JLabel forgotPasswordLabel = new JLabel("FORGOT PASSWORD");
+        /*JLabel forgotPasswordLabel = new JLabel("FORGOT PASSWORD");
         forgotPasswordLabel.setFont(new Font("Arial", Font.BOLD, 12));
         forgotPasswordLabel.setForeground(Color.decode("747070"));
         forgotPasswordLabel.setBounds(75, 260, 150, 20);
-        rightPanel.add(forgotPasswordLabel);
+        rightPanel.add(forgotPasswordLabel);*/
 
         // Enroll now label
         JLabel enrollNowLabel = new JLabel("NO ACCOUNT? ENROLL NOW");
@@ -140,7 +146,13 @@ public class Application {
         enrollNowLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                createRegisterPage();
+                try {
+                    createRegisterPage();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (FontFormatException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
         rightPanel.add(enrollNowLabel);
@@ -151,7 +163,7 @@ public class Application {
         frame.setVisible(true);
     }
 
-    public void createHomePage() {
+    public void createHomePage() throws IOException, FontFormatException {
         JFrame frame = new JFrame("Banking Dashboard");
         frame.setSize(1000, 700);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -170,12 +182,16 @@ public class Application {
         sidebar.setPreferredSize(new Dimension(180, frame.getHeight()));
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
 
+        Font prostoFont = Font.createFont(Font.TRUETYPE_FONT,
+                Objects.requireNonNull(getClass().getResourceAsStream("/resources/fonts/ProstoOne-Regular.ttf")));
+        prostoFont = prostoFont.deriveFont(Font.PLAIN, 20); // Derive the font with desired style and size
+
         // Logo and title
         JLabel logoLabel = new JLabel("FEU", SwingConstants.LEFT);
         logoLabel.setForeground(Color.decode("#F4E27C"));
-        logoLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        logoLabel.setFont(prostoFont);
         logoLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        logoLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+        logoLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
         JLabel onlineLabel = new JLabel("Online", SwingConstants.LEFT);
         onlineLabel.setForeground(Color.WHITE);
@@ -228,6 +244,7 @@ public class Application {
             JPanel contentPanel = createContentPanel(navItems[i].toLowerCase());
             mainContentCards.add(contentPanel, navItems[i].toLowerCase());
         }
+
         // Highlight the first item
         navPanels[0].setBackground(new Color(62, 182, 122));
         navPanels[0].setOpaque(true);
@@ -244,7 +261,17 @@ public class Application {
         userProfile.setFont(new Font("Arial", Font.BOLD, 14));
         userProfile.setAlignmentX(Component.LEFT_ALIGNMENT);
         userProfile.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        userProfile.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                // Switch to the profile panel
+                cardLayout.show(mainContentCards, "profile");
+            }
+        });
         sidebar.add(userProfile);
+
+        JPanel profilePanel = createProfileContent(frame);
+        mainContentCards.add(profilePanel, "profile");
 
         // Add components to frame
         frame.add(sidebar, BorderLayout.WEST);
@@ -409,6 +436,141 @@ public class Application {
     //private JPanel createBillsPage(){
     //}
 
+    private JPanel createProfileContent(JFrame currentFrame){
+        BankAccountClass.UserAccount user = authentication.getLoggedInAccount();
+
+        JPanel profilePanel = new JPanel(null);
+        profilePanel.setBackground(Color.WHITE);
+        profilePanel.setPreferredSize(new Dimension(800, 700));
+        profilePanel.setOpaque(false);
+
+        JPanel topPanel = new JPanel(null);
+        topPanel.setBackground(new Color(244, 226, 124));
+        topPanel.setBounds(0, 0, 800, 100);
+
+        // Profile Panel Components
+        JLabel titleLabel = new JLabel("Profile");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setBounds(40, 40, 200, 30);
+        topPanel.add(titleLabel);
+
+        JPanel lowerPanel = new JPanel(null);
+        lowerPanel.setBackground(Color.WHITE);
+        lowerPanel.setBounds(0, 100, 800,600);
+
+        JLabel nameLabel = new JLabel("Name:");
+        nameLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        nameLabel.setBounds(40, 80, 200, 25);
+
+        JLabel userLabel = new JLabel("Username: ");
+        userLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        userLabel.setBounds(40, 120, 200, 25);
+
+        JLabel birthdayLabel = new JLabel("Birthday: ");
+        birthdayLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        birthdayLabel.setBounds(40, 160, 200, 25);
+
+        JLabel addressLabel = new JLabel("Address: ");
+        addressLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        addressLabel.setBounds(40, 200, 200, 25);
+
+        JLabel passwordLabel = new JLabel("Password: ");
+        passwordLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        passwordLabel.setBounds(40, 240, 200, 25);
+        lowerPanel.add(passwordLabel);
+
+        JPasswordField passwordField = new JPasswordField(user.password);
+        passwordField.setBounds(150, 240, 200, 25);
+        passwordField.setBackground(new Color(255, 255, 255));
+        passwordField.setOpaque(true);
+        lowerPanel.add(passwordField);
+
+        ImageIcon openEyeIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/notvisible.png")));
+        ImageIcon closedEyeIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/visible-2.png")));
+    
+        // Eye button to toggle password visibility
+        JButton toggleButton = new JButton(closedEyeIcon);
+        toggleButton.setBounds(360, 240, 30, 30);
+        toggleButton.setBorderPainted(false);
+        toggleButton.setContentAreaFilled(false);
+        toggleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (passwordField.getEchoChar() != '\u0000') {
+                    passwordField.setEchoChar('\u0000'); // Show password
+                    toggleButton.setIcon(closedEyeIcon);
+                } else {
+                    passwordField.setEchoChar((Character) UIManager.get("PasswordField.echoChar")); // Hide password
+                    toggleButton.setIcon(openEyeIcon);
+                }
+            }
+        });
+
+        JLabel AccountNumber = new JLabel("Account Number: ");
+        AccountNumber.setFont(new Font("Arial", Font.BOLD, 20));
+        AccountNumber.setBounds(40, 280, 200, 25);
+
+        JLabel pinLabel = new JLabel("PIN: ");
+        pinLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        pinLabel.setBounds(40, 320, 200, 25);
+
+        JPasswordField pinField = new JPasswordField(user.pin);
+        pinField.setBounds(150, 320, 200, 25);
+        pinField.setBackground(new Color(255, 255, 255));
+        pinField.setOpaque(true);
+        lowerPanel.add(pinField);
+    
+        // Eye button to toggle password visibility
+        JButton toggleButton2 = new JButton(closedEyeIcon);
+        toggleButton2.setBounds(360, 320, 30, 30);
+        toggleButton2.setBorderPainted(false);
+        toggleButton2.setContentAreaFilled(false);
+        toggleButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (pinField.getEchoChar() != '\u0000') {
+                    pinField.setEchoChar('\u0000'); // Show password
+                    toggleButton2.setIcon(closedEyeIcon);
+                } else {
+                    pinField.setEchoChar((Character) UIManager.get("PasswordField.echoChar")); // Hide password
+                    toggleButton2.setIcon(openEyeIcon);
+                }
+            }
+        });
+
+        JButton loginButton = new JButton("LOG OUT");
+        loginButton.setBounds(100, 400, 260, 40);
+        loginButton.setBackground(new Color(30, 30, 30));
+        loginButton.setOpaque(true);
+        loginButton.setForeground(Color.WHITE);
+        loginButton.setFont(new Font("Arial", Font.BOLD, 14));
+        loginButton.setBorder(BorderFactory.createLineBorder(new Color(30, 30, 30), 1, true)); // Rounded border
+        loginButton.setFocusPainted(false);
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    currentFrame.dispose();
+                    createLoginFrame();
+            }
+        });
+        lowerPanel.add(loginButton);
+        
+        lowerPanel.add(toggleButton);
+        lowerPanel.add(nameLabel);
+        lowerPanel.add(userLabel);
+        lowerPanel.add(birthdayLabel);
+        lowerPanel.add(addressLabel);
+        lowerPanel.add(passwordLabel);
+        lowerPanel.add(AccountNumber);
+        lowerPanel.add(pinLabel);
+        lowerPanel.add(toggleButton2);
+
+
+        profilePanel.add(topPanel);
+        profilePanel.add(lowerPanel);
+
+        return profilePanel;
+    }
 
     private JPanel createLoadContent() {
 
@@ -566,10 +728,10 @@ public class Application {
         return loadPanel;
     }
 
-    private void createRegisterPage() {
+    private void createRegisterPage() throws IOException, FontFormatException {
         JFrame registerFrame = new JFrame("FEU Register Page");
         registerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        registerFrame.setSize(800, 700);
+        registerFrame.setSize(700, 600);
         registerFrame.setBackground(Color.decode("#1B5045"));
         registerFrame.setLayout(null); // Use null layout for manual positioning
 
@@ -580,7 +742,7 @@ public class Application {
         // Left Panel (White background)
         JPanel leftPanel = new JPanel(null);
         leftPanel.setBackground(Color.WHITE);
-        leftPanel.setBounds(0, 0, 600, 700); // 600px width for the left side to accommodate all fields
+        leftPanel.setBounds(0, 0, 550, 600); // 600px width for the left side to accommodate all fields
 
         // Left panel components
         JLabel registerLabel = new JLabel("Register to FEU Online");
@@ -722,9 +884,25 @@ public class Application {
 
         // Right Panel (Green background, adjusted to 200px width)
         JPanel rightPanel = new JPanel(null);
-        rightPanel.setBackground(new Color(244, 226, 124)); // Yellow background or green
-        rightPanel.setBounds(600, 0, 200, 700); // Adjusted right panel width to 200px
+        rightPanel.setBackground(Color.decode("#1B5045")); // Yellow background or green
+        rightPanel.setBounds(300, 0, 400, 700); // Adjusted right panel width to 200px
 
+        Font prostoFont = Font.createFont(Font.TRUETYPE_FONT,
+                Objects.requireNonNull(getClass().getResourceAsStream("/resources/fonts/ProstoOne-Regular.ttf")));
+        prostoFont = prostoFont.deriveFont(Font.PLAIN, 32); // Derive the font with desired style and size
+
+        JLabel titleLabel = new JLabel("FEU");
+        titleLabel.setForeground(new Color(244, 226, 124));
+        titleLabel.setFont(prostoFont); // Set the Prosto One font
+        titleLabel.setBounds(280, 450, 100, 60);
+        rightPanel.add(titleLabel);
+
+        // "Online" text
+        JLabel onlineLabel = new JLabel("Online");
+        onlineLabel.setForeground(Color.WHITE);
+        onlineLabel.setFont(prostoFont.deriveFont(Font.PLAIN, 16)); // Apply Prosto One font (smaller size)
+        onlineLabel.setBounds(280, 490, 100, 30);
+        rightPanel.add(onlineLabel);
         // Add the left panel and right panel to the main panel
         registerPanel.add(leftPanel);
         registerPanel.add(rightPanel);
