@@ -254,8 +254,8 @@ public class Application {
         sidebar.add(Box.createVerticalGlue());
 
         // Add user info at bottom
-        String name = capitalizeFirstLetter(authentication.getLoggedInAccount().firstName) + " " +
-                capitalizeFirstLetter(authentication.getLoggedInAccount().lastName);
+        String name = capitalizeFirstLetter(authentication.getLoggedInAccount().getFirstName()) + " " +
+                capitalizeFirstLetter(authentication.getLoggedInAccount().getLastName());
         JLabel userProfile = new JLabel(name, SwingConstants.LEFT);
         userProfile.setForeground(Color.WHITE);
         userProfile.setFont(new Font("Arial", Font.BOLD, 14));
@@ -314,8 +314,8 @@ public class Application {
         topPanel.setBackground(Color.WHITE);
 
         // Welcome User
-        String name = capitalizeFirstLetter(user.firstName) + " " +
-                capitalizeFirstLetter(user.lastName);
+        String name = capitalizeFirstLetter(user.getFirstName()) + " " +
+                capitalizeFirstLetter(user.getFirstName());
         JLabel welcomeLabel = new JLabel("Welcome, " + name, SwingConstants.LEFT);
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 28));
         welcomeLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -356,13 +356,13 @@ public class Application {
         blackPanel.setBackground(Color.BLACK);
         savingsCard.add(blackPanel, BorderLayout.SOUTH);
 
-        JLabel balanceLabel = new JLabel("P " + user.balance, SwingConstants.LEFT);
+        JLabel balanceLabel = new JLabel("P " + user.getBalance(), SwingConstants.LEFT);
         balanceLabel.setFont(new Font("Arial", Font.BOLD, 20));
         balanceLabel.setForeground(Color.WHITE);
         balanceLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
         blackPanel.add(balanceLabel, BorderLayout.WEST);
 
-        String maskedAccountNumber = "•••• " + user.accountNumber.substring(user.accountNumber.length() - 4);
+        String maskedAccountNumber = "•••• " + user.getAccountNumber().substring(user.getAccountNumber().length() - 4);
         JLabel accountNumber = new JLabel(maskedAccountNumber, SwingConstants.RIGHT);
         accountNumber.setFont(new Font("Arial", Font.BOLD, 20));
         accountNumber.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
@@ -492,7 +492,7 @@ public class Application {
         availAmountLabel.setBounds(40, 40, 200, 30);
         rightPanel.add(availAmountLabel);
 
-        JLabel balanceLabel = new JLabel("P " + user.balance);
+        JLabel balanceLabel = new JLabel("P " + user.getBalance());
         balanceLabel.setFont(new Font("Arial", Font.BOLD, 48));
         balanceLabel.setBounds(40, 80, 200, 48);
         rightPanel.add(balanceLabel);
@@ -862,7 +862,7 @@ public class Application {
         amountAvail.setBounds(40, 240, 150, 25);
         balancePanel.add(amountAvail);
 
-        JLabel balance = new JLabel("P" + user.balance);
+        JLabel balance = new JLabel("P" + user.getBalance());
         balance.setFont(new Font("Arial", Font.BOLD, 18));
         balance.setBounds(40, 270, 150, 25);
         balancePanel.add(balance);
@@ -959,7 +959,7 @@ public class Application {
                     pinDialog.dispose();
 
                     user.buyLoad(number, Double.parseDouble(amount), serviceProvider);
-                    balance.setText("P" + user.balance);
+                    balance.setText("P" + user.getBalance());
                 }
             });
 

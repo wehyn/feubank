@@ -5,17 +5,17 @@ import java.util.Random;
 
 public class BankAccountClass {
     public static class UserAccount {
-        String accountNumber; // Random Generated Account Number
-        String username; // Auto generated First Name Initial + Middle Name Initial + Surname
-        String firstName;
-        String middleName;
-        String lastName;
-        String email;
-        String birthday;
-        String address;
-        double balance;
-        String password;
-        String pin;
+        private String accountNumber; // Random Generated Account Number
+        private String username; // Auto generated First Name Initial + Middle Name Initial + Surname
+        private String firstName;
+        private String middleName;
+        private String lastName;
+        private String email;
+        private String birthday;
+        private String address;
+        private double balance;
+        public String password;
+        public String pin;
         ArrayList<Transaction> transactions = new ArrayList<>();
 
         public UserAccount(String firstName, String middleName, String lastName, String email, String birthday, String address, double balance, String password, String pin) {
@@ -36,6 +36,17 @@ public class BankAccountClass {
             return (username.equals(this.username) || username.equals(this.email)) && this.password.equals(inputPassword);
         }
 
+        public String getFirstName() {
+            return this.firstName;
+        }
+
+        public String getMiddleName() {
+            return this.middleName;
+        }
+
+        public String getLastName() {
+            return this.lastName;
+        }
 
         public ArrayList<Transaction> getTransactions() {
             return this.transactions;
