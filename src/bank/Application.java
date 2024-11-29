@@ -385,7 +385,7 @@ public class Application {
         balanceLabel.setForeground(Color.BLACK);
         creditBalance.add(balanceText,BorderLayout.WEST);
 
-        JLabel balanceAmount = new JLabel("P" );
+        JLabel balanceAmount = new JLabel("P" + user.getBalance());
         balanceAmount.setFont(new Font("Arial", Font.BOLD, 14));
         creditBalance.add(balanceAmount, BorderLayout.WEST);
         cardPanel.add(creditBalance, gbc);
