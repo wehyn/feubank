@@ -27,10 +27,6 @@ public class Authentication {
         accounts.add(testAccount);
         accounts.add(secondTestAccount);
 
-        // TransferMoney Test
-        testAccount.transferMoney(secondTestAccount, 200);
-        testAccount.transferMoney(secondTestAccount, 100);
-
     }
 
     public BankAccountClass.UserAccount findAccountNumber(String accountNumber) {

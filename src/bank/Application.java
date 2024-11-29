@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Application {
@@ -21,6 +22,7 @@ public class Application {
 
     private CardLayout cardLayout;
     private JPanel mainContentCards;
+    private JFrame mainFrame;
 
     public Application() {
         authentication = new Authentication();
@@ -129,18 +131,12 @@ public class Application {
         });
         rightPanel.add(loginButton);
 
-        // Forgot password label
-        /*JLabel forgotPasswordLabel = new JLabel("FORGOT PASSWORD");
-        forgotPasswordLabel.setFont(new Font("Arial", Font.BOLD, 12));
-        forgotPasswordLabel.setForeground(Color.decode("747070"));
-        forgotPasswordLabel.setBounds(75, 260, 150, 20);
-        rightPanel.add(forgotPasswordLabel);*/
-
         // Enroll now label
         JLabel enrollNowLabel = new JLabel("NO ACCOUNT? ENROLL NOW");
         enrollNowLabel.setFont(new Font("Arial", Font.BOLD, 12));
         enrollNowLabel.setForeground(Color.decode("747070"));
         enrollNowLabel.setBounds(55, 300, 200, 20);
+        enrollNowLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         enrollNowLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -162,12 +158,12 @@ public class Application {
     }
 
     public void createHomePage() throws IOException, FontFormatException {
-        JFrame frame = new JFrame("Banking Dashboard");
-        frame.setSize(1000, 700);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
-        frame.setLayout(new BorderLayout());
+        mainFrame = new JFrame("Banking Dashboard");
+        mainFrame.setSize(1000, 700);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setResizable(false);
+        mainFrame.setLocationRelativeTo(null);
+        mainFrame.setLayout(new BorderLayout());
 
         // Create CardLayout for main content
         cardLayout = new CardLayout();
@@ -177,31 +173,36 @@ public class Application {
         // Sidebar
         JPanel sidebar = new JPanel();
         sidebar.setBackground(Color.decode("#1B5045"));
-        sidebar.setPreferredSize(new Dimension(180, frame.getHeight()));
-        sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
+        sidebar.setPreferredSize(new Dimension(180, mainFrame.getHeight()));
+        sidebar.setLayout(new BorderLayout());
 
         Font prostoFont = Font.createFont(Font.TRUETYPE_FONT,
                 Objects.requireNonNull(getClass().getResourceAsStream("/resources/fonts/ProstoOne-Regular.ttf")));
         prostoFont = prostoFont.deriveFont(Font.PLAIN, 20); // Derive the font with desired style and size
 
         // Logo and title
+        JPanel logoPanel = new JPanel(new BorderLayout());
+        logoPanel.setBackground(Color.decode("#1B5045"));
+
         JLabel logoLabel = new JLabel("FEU", SwingConstants.LEFT);
         logoLabel.setForeground(Color.decode("#F4E27C"));
         logoLabel.setFont(prostoFont);
-        logoLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        logoLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        logoLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 0));
+        logoPanel.add(logoLabel, BorderLayout.NORTH);
 
         JLabel onlineLabel = new JLabel("Online", SwingConstants.LEFT);
         onlineLabel.setForeground(Color.WHITE);
         onlineLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        onlineLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         onlineLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 0));
+        logoPanel.add(onlineLabel, BorderLayout.SOUTH);
 
-        sidebar.add(Box.createVerticalStrut(20));
-        sidebar.add(logoLabel);
-        sidebar.add(onlineLabel);
+        sidebar.add(logoPanel, BorderLayout.NORTH);
 
-        // Create navigation items with panels
+        // Navigation items with panels
+        JPanel navPanel = new JPanel();
+        navPanel.setLayout(new BoxLayout(navPanel, BoxLayout.Y_AXIS));
+        navPanel.setBackground(Color.decode("#1B5045"));
+
         String[] navItems = {"Home", "Load", "Transfer", "Loan"};
         JPanel[] navPanels = new JPanel[navItems.length];
 
@@ -213,10 +214,10 @@ public class Application {
             JLabel navLabel = new JLabel(navItems[i], SwingConstants.LEFT);
             navLabel.setForeground(Color.WHITE);
             navLabel.setFont(new Font("Arial", Font.BOLD, 14));
-            navLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0)); //
+            navLabel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 0));
 
-            navPanels[i].setMinimumSize(new Dimension(180, 3000));
-            navPanels[i].setMaximumSize(new Dimension(180, 3000));
+            navPanels[i].setMinimumSize(new Dimension(180, 50));
+            navPanels[i].setMaximumSize(new Dimension(180, 50));
 
             final int index = i;
             navPanels[i].addMouseListener(new java.awt.event.MouseAdapter() {
@@ -236,29 +237,31 @@ public class Application {
             });
 
             navPanels[i].add(navLabel, BorderLayout.CENTER);
-            sidebar.add(navPanels[i]);
+            navPanel.add(navPanels[i]);
 
             // Create and add content panel
             JPanel contentPanel = createContentPanel(navItems[i].toLowerCase());
             mainContentCards.add(contentPanel, navItems[i].toLowerCase());
         }
 
+        sidebar.add(navPanel, BorderLayout.CENTER);
+
         // Highlight the first item
         navPanels[0].setBackground(new Color(62, 182, 122));
         navPanels[0].setOpaque(true);
         cardLayout.show(mainContentCards, "home");
 
-        // Add glue to push remaining items to bottom
-        sidebar.add(Box.createVerticalGlue());
-
         // Add user info at bottom
         String name = capitalizeFirstLetter(authentication.getLoggedInAccount().getFirstName()) + " " +
                 capitalizeFirstLetter(authentication.getLoggedInAccount().getLastName());
+        JPanel userInfoPanel = new JPanel(new BorderLayout());
+        userInfoPanel.setBackground(Color.decode("#1B5045"));
+
         JLabel userProfile = new JLabel(name, SwingConstants.LEFT);
         userProfile.setForeground(Color.WHITE);
         userProfile.setFont(new Font("Arial", Font.BOLD, 14));
-        userProfile.setAlignmentX(Component.LEFT_ALIGNMENT);
-        userProfile.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        userProfile.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        userProfile.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 0));
         userProfile.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -266,16 +269,18 @@ public class Application {
                 cardLayout.show(mainContentCards, "profile");
             }
         });
-        sidebar.add(userProfile);
+        userInfoPanel.add(userProfile, BorderLayout.CENTER);
 
-        JPanel profilePanel = createProfileContent(frame);
+        sidebar.add(userInfoPanel, BorderLayout.SOUTH);
+
+        JPanel profilePanel = createProfileContent(mainFrame);
         mainContentCards.add(profilePanel, "profile");
 
         // Add components to frame
-        frame.add(sidebar, BorderLayout.WEST);
-        frame.add(mainContentCards, BorderLayout.CENTER);
+        mainFrame.add(sidebar, BorderLayout.WEST);
+        mainFrame.add(mainContentCards, BorderLayout.CENTER);
 
-        frame.setVisible(true);
+        mainFrame.setVisible(true);
     }
 
 
@@ -606,17 +611,21 @@ public class Application {
     }
 
     private void refreshPages() {
-        mainContentCards.remove(0);
-        mainContentCards.remove(1);
-        mainContentCards.remove(2);
+
+        mainContentCards.removeAll();
 
         JPanel homePanel = createHomeContent();
         JPanel loadPanel = createLoadContent();
         JPanel transferPanel = createTransferPage();
+        JPanel loanPanel = createloanPage();
+        JPanel profilePanel = createProfileContent(mainFrame);
+
 
         mainContentCards.add(homePanel, "home");
         mainContentCards.add(loadPanel, "load");
         mainContentCards.add(transferPanel, "transfer");
+        mainContentCards.add(loanPanel, "loan");
+        mainContentCards.add(profilePanel, "profile");
 
         mainContentCards.revalidate();
         mainContentCards.repaint();
@@ -897,19 +906,19 @@ public class Application {
         lowerPanel.setBackground(Color.WHITE);
         lowerPanel.setBounds(0, 100, 800,600);
 
-        JLabel nameLabel = new JLabel("Name:");
+        JLabel nameLabel = new JLabel(STR."Name: \{capitalizeFirstLetter(user.getFirstName())} \{capitalizeFirstLetter(user.getLastName())}");
         nameLabel.setFont(new Font("Arial", Font.BOLD, 20));
         nameLabel.setBounds(40, 80, 200, 25);
 
-        JLabel userLabel = new JLabel("Username: ");
+        JLabel userLabel = new JLabel("Username: " + user.getUsername());
         userLabel.setFont(new Font("Arial", Font.BOLD, 20));
         userLabel.setBounds(40, 120, 200, 25);
 
-        JLabel birthdayLabel = new JLabel("Birthday: ");
+        JLabel birthdayLabel = new JLabel("Birthday: " + user.getBirthday());
         birthdayLabel.setFont(new Font("Arial", Font.BOLD, 20));
         birthdayLabel.setBounds(40, 160, 200, 25);
 
-        JLabel addressLabel = new JLabel("Address: ");
+        JLabel addressLabel = new JLabel(STR."Address: \{user.getAddress()}");
         addressLabel.setFont(new Font("Arial", Font.BOLD, 20));
         addressLabel.setBounds(40, 200, 200, 25);
 
@@ -1161,6 +1170,7 @@ public class Application {
 
             BankAccountClass.UserAccount newUser = new BankAccountClass.UserAccount(firstName, middleName, lastName, email, birthday, address, 0, password, pin);
             authentication.addUser(newUser);
+            System.out.println(newUser.getAccountNumber());
             registerFrame.dispose();
 
         });
