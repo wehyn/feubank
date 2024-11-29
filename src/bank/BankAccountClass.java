@@ -62,6 +62,10 @@ public class BankAccountClass {
             return this.accountNumber;
         }
 
+        public String getAddress() {
+            return this.address;
+        }
+
         public double getBalance() {
             return this.balance;
         }
@@ -132,7 +136,20 @@ public class BankAccountClass {
                 return false;
             }
 
-            this.balance -= amount;
+            if (recipient == null) {
+                return false;
+            }
+
+            if (recipient.getAccountNumber() != null && recipient.getAccountNumber().length() >= 3) {
+                String prefix = recipient.getAccountNumber().substring(0, 3); // Get the first 3 characters
+                if (prefix.equals("FEU")) {
+                    this.balance -= amount;
+                } else {
+                    this.balance -= amount + otherBankFee;
+                }
+            } else {
+                return false;
+            }
 
             recipient.balance += amount;
 
