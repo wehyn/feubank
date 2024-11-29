@@ -1,2 +1,8 @@
 FEU-5202,wayne,cantos,garcia,wayne@gmail.com,01 Jan 2024,pasig,0.0,admin,1029
 FEU-8706,lol,test,test,test@gmail.com,01 Jan 2024,test,0.0,1029,3499
+FEU-5085,Patricia Therese,Pagayoya,Damaso,damasopatricia12@gmail.com,10 Dec 2004,086, Burgos, San Marcelino, Zambales,0.0,Patricia@12,2004
+FEU-7792,John,Wayne,Gacey,Jwgacey@gmail.com,04 Jun 1960,Block 1, Cansas,0.0,JCWayne,1234
+FEU-8808,Blaster,Juan,Salonga,BJsalonga@gmail.com,08 Mar 2003,087, Florida, USA,0.0,BJSalonga,1234
+FEU-2152,Lex,Mira,Luther,LLuther@gmail.com,04 Sep 1977,789, Gotham City,0.0,LLuther,2045
+FEU-8004,Miranda,Jay,Rights,MJRights@gmail.com,04 Jan 1952,756, Sampaloc, Manila,0.0,jj123,1234
+FEU-3059,Bill,bill,bill,bill@gmail.com,01 Jul 1994,877, Sampaloc, Metro Manila,0.0,bill,1234

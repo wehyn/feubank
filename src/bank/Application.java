@@ -12,7 +12,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class Application {
@@ -576,24 +575,35 @@ public class Application {
             pinDialog.add(buttonPanel, BorderLayout.SOUTH);
 
             // Add functionality
-            confirmButton.addActionListener(event -> {
+            cancelButton.addActionListener(actionEvent -> {
+                pinDialog.dispose();
+            });
+
+            confirmButton.addActionListener(actionEvent -> {
 
                 String number = numberField.getText();
                 String amount = amountField.getText();
+                String pinRef = String.valueOf(Integer.parseInt(user.pin));
                 String serviceProvider = (String) serviceProviderComboBox.getSelectedItem();
 
                 String pin = new String(pinField.getPassword());
                 if (pin.isEmpty()) {
                     JOptionPane.showMessageDialog(pinDialog, "PIN cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(pinDialog, "PIN entered: " + pin, "Success", JOptionPane.INFORMATION_MESSAGE);
+                } else if (!(pin.equals(pinRef))){
+                    JOptionPane.showMessageDialog(pinDialog, "Incorrect PIN. Try Again.", "Error", JOptionPane.ERROR_MESSAGE);
+
+                }
+                else {
                     pinDialog.dispose();
+                    JOptionPane.showMessageDialog(pinDialog, "Load to " + number + " is successful", "Success", JOptionPane.INFORMATION_MESSAGE);
 
                     if (user.buyLoad(number, Double.parseDouble(amount), serviceProvider)){
                         refreshPages();
                     }
 
                 }
+
+
             });
 
             cancelButton.addActionListener(event -> pinDialog.dispose()); // Close dialog
@@ -1026,7 +1036,31 @@ public class Application {
         registerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         registerFrame.setSize(700, 600);
         registerFrame.setBackground(Color.decode("#1B5045"));
+        registerFrame.setLocationRelativeTo(null);
         registerFrame.setLayout(null); // Use null layout for manual positioning
+
+        // Right Panel (Green background, adjusted to 200px width)
+        JPanel rightPanel = new JPanel(null);
+        rightPanel.setBackground(Color.decode("#1B5045")); // Yellow background or green
+        rightPanel.setBounds(300, 0, 400, 700); // Adjusted right panel width to 200px
+
+        Font prostoFont = Font.createFont(Font.TRUETYPE_FONT,
+                Objects.requireNonNull(getClass().getResourceAsStream("/resources/fonts/ProstoOne-Regular.ttf")));
+        prostoFont = prostoFont.deriveFont(Font.PLAIN, 32); // Derive the font with desired style and size
+
+        JLabel titleLabel = new JLabel("FEU");
+        titleLabel.setForeground(new Color(244, 226, 124));
+        titleLabel.setFont(prostoFont); // Set the Prosto One font
+        titleLabel.setBounds(280, 450, 100, 60);
+        rightPanel.add(titleLabel);
+
+        // "Online" text
+        JLabel onlineLabel = new JLabel("Online");
+        onlineLabel.setForeground(Color.WHITE);
+        onlineLabel.setFont(prostoFont.deriveFont(Font.PLAIN, 16)); // Apply Prosto One font (smaller size)
+        onlineLabel.setBounds(280, 490, 100, 30);
+        rightPanel.add(onlineLabel);
+        // Add the left panel and right panel to the main panel
 
         JPanel registerPanel = new JPanel(null);
         registerPanel.setBackground(Color.WHITE);
@@ -1156,7 +1190,7 @@ public class Application {
         registerButton.setFont(new Font("Arial", Font.BOLD, 14));
         registerButton.setOpaque(true);
         registerButton.setBorderPainted(false);
-        registerButton.addActionListener(e -> {
+        registerButton.addActionListener(actionEvent -> {
             // Add action listener code here
             String firstName = firstNameField.getText();
             String middleName = middleNameField.getText();
@@ -1169,43 +1203,28 @@ public class Application {
             String pin = new String(pinField.getPassword());
 
             BankAccountClass.UserAccount newUser = new BankAccountClass.UserAccount(firstName, middleName, lastName, email, birthday, address, 0, password, pin);
-            authentication.addUserToFile(newUser);
-            authentication.addUser(newUser);
             System.out.println(newUser.getAccountNumber());
+            authentication.addUserToFile(newUser);
+
+            JOptionPane.showMessageDialog(null, "Registration Successful", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            authentication.addUser(newUser);
+
             registerFrame.dispose();
 
         });
+
         leftPanel.add(registerButton);
 
-        // Right Panel (Green background, adjusted to 200px width)
-        JPanel rightPanel = new JPanel(null);
-        rightPanel.setBackground(Color.decode("#1B5045")); // Yellow background or green
-        rightPanel.setBounds(300, 0, 400, 700); // Adjusted right panel width to 200px
-
-        Font prostoFont = Font.createFont(Font.TRUETYPE_FONT,
-                Objects.requireNonNull(getClass().getResourceAsStream("/resources/fonts/ProstoOne-Regular.ttf")));
-        prostoFont = prostoFont.deriveFont(Font.PLAIN, 32); // Derive the font with desired style and size
-
-        JLabel titleLabel = new JLabel("FEU");
-        titleLabel.setForeground(new Color(244, 226, 124));
-        titleLabel.setFont(prostoFont); // Set the Prosto One font
-        titleLabel.setBounds(280, 450, 100, 60);
-        rightPanel.add(titleLabel);
-
-        // "Online" text
-        JLabel onlineLabel = new JLabel("Online");
-        onlineLabel.setForeground(Color.WHITE);
-        onlineLabel.setFont(prostoFont.deriveFont(Font.PLAIN, 16)); // Apply Prosto One font (smaller size)
-        onlineLabel.setBounds(280, 490, 100, 30);
-        rightPanel.add(onlineLabel);
-        // Add the left panel and right panel to the main panel
         registerPanel.add(leftPanel);
         registerPanel.add(rightPanel);
 
         // Add the main panel to the frame
         registerFrame.add(registerPanel);
         registerFrame.setVisible(true);
+
     }
+
 
     public static String capitalizeFirstLetter(String input) {
         if (input == null || input.isEmpty()) {
