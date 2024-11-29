@@ -1,5 +1,9 @@
 package bank;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,5 +60,36 @@ public class Authentication {
         return loggedInAccount;
     }
 
+    public boolean addUserToFile(BankAccountClass.UserAccount newUser) {
+        if (newUser == null) {
+            return false;
+        }
+
+        File file = new File("src/bank/accounts.txt");
+
+        try {
+            FileWriter fileWriter = new FileWriter(file, true);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+            bufferedWriter.write(newUser.getAccountNumber() + ",");
+            bufferedWriter.write(newUser.getFirstName() + ",");
+            bufferedWriter.write(newUser.getMiddleName() + ",");
+            bufferedWriter.write(newUser.getLastName() + ",");
+            bufferedWriter.write(newUser.getEmail() + ",");
+            bufferedWriter.write(newUser.getBirthday() + ",");
+            bufferedWriter.write(newUser.getAddress() + ",");
+            bufferedWriter.write(newUser.getBalance() + ",");
+            bufferedWriter.write(newUser.getPassword() + ",");
+            bufferedWriter.write(newUser.getPIN() + "\n");
+
+            bufferedWriter.close();
+            fileWriter.close();
+
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 }

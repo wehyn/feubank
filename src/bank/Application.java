@@ -1169,6 +1169,7 @@ public class Application {
             String pin = new String(pinField.getPassword());
 
             BankAccountClass.UserAccount newUser = new BankAccountClass.UserAccount(firstName, middleName, lastName, email, birthday, address, 0, password, pin);
+            authentication.addUserToFile(newUser);
             authentication.addUser(newUser);
             System.out.println(newUser.getAccountNumber());
             registerFrame.dispose();

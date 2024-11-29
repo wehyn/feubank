@@ -174,6 +174,13 @@ public class BankAccountClass {
             return true;
         }
 
+        public String getPassword() {
+            return this.password;
+        }
+
+        public String getPIN() {
+            return this.pin;
+        }
 
     }
 
