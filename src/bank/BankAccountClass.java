@@ -120,7 +120,6 @@ public class BankAccountClass {
         public boolean transferMoney(UserAccount recipient, double amount) {
 
             double otherBankFee = 10;
-
             if (amount <= 0) {
                 return false;
             }

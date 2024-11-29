@@ -585,7 +585,7 @@ public class Application {
                     pinDialog.dispose();
 
                     if (user.buyLoad(number, Double.parseDouble(amount), serviceProvider)){
-                        refreshHomeContent();
+                        refreshPages();
                     }
 
                 }
@@ -605,15 +605,18 @@ public class Application {
         return loadPanel;
     }
 
-    private void refreshHomeContent() {
+    private void refreshPages() {
         mainContentCards.remove(0);
         mainContentCards.remove(1);
+        mainContentCards.remove(2);
 
         JPanel homePanel = createHomeContent();
         JPanel loadPanel = createLoadContent();
+        JPanel transferPanel = createTransferPage();
 
         mainContentCards.add(homePanel, "home");
         mainContentCards.add(loadPanel, "load");
+        mainContentCards.add(transferPanel, "transfer");
 
         mainContentCards.revalidate();
         mainContentCards.repaint();
@@ -729,6 +732,11 @@ public class Application {
                     "Transferred P " + amount + " to " + accName + ", " + accNum,
                     "SUCCESS",
                     JOptionPane.INFORMATION_MESSAGE);
+
+            if (user.transferMoney(authentication.findAccountNumber(accNum),Double.parseDouble(amount))){
+                refreshPages();
+            }
+
         });
         rightPanel.add(ProceedButton);
 
@@ -1186,30 +1194,6 @@ public class Application {
         // Add the main panel to the frame
         registerFrame.add(registerPanel);
         registerFrame.setVisible(true);
-    }
-
-
-    private JLabel createLabel(String text, int x, int y) {
-        JLabel label = new JLabel(text);
-        label.setFont(new Font("Arial", Font.PLAIN, 14));
-        label.setBounds(x, y, 200, 25);
-        return label;
-    }
-
-    private JTextField createTextField(int x, int y) {
-        JTextField textField = new JTextField();
-        textField.setPreferredSize(new Dimension(150, 30));
-        textField.setBackground(new Color(240, 240, 240));
-        textField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
-        return textField;
-    }
-
-    private JPasswordField createPasswordField(int x, int y) {
-        JPasswordField passwordField = new JPasswordField();
-        passwordField.setBounds(x, y, 250, 30);
-        passwordField.setBackground(new Color(240, 240, 240));
-        passwordField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
-        return passwordField;
     }
 
     public static String capitalizeFirstLetter(String input) {
