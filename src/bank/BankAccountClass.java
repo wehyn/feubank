@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BankAccountClass {
-    public static class UserAccount {
+    public static class UserAccount extends BankAccount{
         private String accountNumber; // Random Generated Account Number
         private String username; // Auto generated First Name Initial + Middle Name Initial + Surname
         private String firstName;
@@ -19,6 +19,7 @@ public class BankAccountClass {
         ArrayList<Transaction> transactions = new ArrayList<>();
 
         public UserAccount(String firstName, String middleName, String lastName, String email, String birthday, String address, double balance, String password, String pin) {
+            super(STR."FEU-\{new Random().nextInt(9000)}", 0);
             this.accountNumber = generateAccountNumber();
             this.username = (String.valueOf(firstName.charAt(0)) + middleName.charAt(0) + lastName).toLowerCase();
             this.firstName = firstName;
@@ -82,6 +83,7 @@ public class BankAccountClass {
             return this.email;
         }
 
+        @Override
         public boolean buyLoad(String number, double amount, String serviceProvider) {
             double transactionFee = 1;
 
@@ -119,8 +121,7 @@ public class BankAccountClass {
 
         }
 
-
-
+        @Override
         public boolean transferMoney(UserAccount recipient, double amount) {
 
             double otherBankFee = 10;
