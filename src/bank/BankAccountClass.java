@@ -19,7 +19,7 @@ public class BankAccountClass {
         ArrayList<Transaction> transactions = new ArrayList<>();
 
         public UserAccount(String firstName, String middleName, String lastName, String email, String birthday, String address, double balance, String password, String pin) {
-            super(STR."FEU-\{new Random().nextInt(9000)}", 0);
+            super(STR."FEU-\{new Random().nextInt(9000)}", 5000);
             this.accountNumber = generateAccountNumber();
             this.username = (String.valueOf(firstName.charAt(0)) + middleName.charAt(0) + lastName).toLowerCase();
             this.firstName = firstName;
