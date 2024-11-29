@@ -13,13 +13,11 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.logging.LoggingPermission;
-import javax.swing.*;
 
 public class Application {
 
     // Stores the users
-    private Authentication authentication;
+    private final Authentication authentication;
 
     private CardLayout cardLayout;
     private JPanel mainContentCards;
@@ -282,13 +280,6 @@ public class Application {
 
 
     // Add the cards panel to the frame
-    public static String capitalizeFirstLetter(String input) {
-        if (input == null || input.isEmpty()) {
-            return input;
-        }
-        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
-    }
-
     private JPanel createContentPanel(String type) {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
@@ -301,6 +292,7 @@ public class Application {
             default -> panel;
         };
     }
+
 
     private JPanel createHomeContent(){
 
@@ -315,7 +307,7 @@ public class Application {
 
         // Welcome User
         String name = capitalizeFirstLetter(user.getFirstName()) + " " +
-                capitalizeFirstLetter(user.getFirstName());
+                capitalizeFirstLetter(user.getLastName());
         JLabel welcomeLabel = new JLabel("Welcome, " + name, SwingConstants.LEFT);
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 28));
         welcomeLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -335,7 +327,7 @@ public class Application {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 try {
-                    BufferedImage backgroundImage = ImageIO.read(getClass().getResourceAsStream("/resources/0601res-feu-clip.jpg"));
+                    BufferedImage backgroundImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/resources/0601res-feu-clip.jpg")));
                     g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -356,13 +348,13 @@ public class Application {
         blackPanel.setBackground(Color.BLACK);
         savingsCard.add(blackPanel, BorderLayout.SOUTH);
 
-        JLabel balanceLabel = new JLabel("P " + user.getBalance(), SwingConstants.LEFT);
+        JLabel balanceLabel = new JLabel(STR."P \{user.getBalance()}", SwingConstants.LEFT);
         balanceLabel.setFont(new Font("Arial", Font.BOLD, 20));
         balanceLabel.setForeground(Color.WHITE);
         balanceLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
         blackPanel.add(balanceLabel, BorderLayout.WEST);
 
-        String maskedAccountNumber = "•••• " + user.getAccountNumber().substring(user.getAccountNumber().length() - 4);
+        String maskedAccountNumber = STR."•••• \{user.getAccountNumber().substring(user.getAccountNumber().length() - 4)}";
         JLabel accountNumber = new JLabel(maskedAccountNumber, SwingConstants.RIGHT);
         accountNumber.setFont(new Font("Arial", Font.BOLD, 20));
         accountNumber.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
@@ -385,7 +377,7 @@ public class Application {
         balanceLabel.setForeground(Color.BLACK);
         creditBalance.add(balanceText,BorderLayout.WEST);
 
-        JLabel balanceAmount = new JLabel("P" + user.getBalance());
+        JLabel balanceAmount = new JLabel(STR."P\{user.getBalance()}");
         balanceAmount.setFont(new Font("Arial", Font.BOLD, 14));
         creditBalance.add(balanceAmount, BorderLayout.WEST);
         cardPanel.add(creditBalance, gbc);
@@ -411,23 +403,221 @@ public class Application {
         homePanel.add(topPanel, BorderLayout.NORTH);
 
         // Transactions Panel
+        JPanel transactionsPanel = createTransactionsPanel(user);
+        homePanel.add(transactionsPanel, BorderLayout.CENTER);
+
+        return homePanel;
+    }
+
+    private JPanel createTransactionsPanel(BankAccountClass.UserAccount user) {
         JPanel transactionsPanel = new JPanel();
         transactionsPanel.setLayout(new BoxLayout(transactionsPanel, BoxLayout.Y_AXIS));
         transactionsPanel.setBackground(Color.decode("#F5F5F5"));
         transactionsPanel.setBorder(BorderFactory.createTitledBorder("Transactions"));
 
+        // Clear any existing components
+        transactionsPanel.removeAll();
+
         ArrayList<BankAccountClass.Transaction> userTransactions = user.getTransactions();
 
-        for (BankAccountClass.Transaction transaction : userTransactions) {
-            JLabel transactionLabel = new JLabel(transaction.details + ": "+ transaction.amount);
-            transactionLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-            transactionLabel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 0));
-            transactionsPanel.add(transactionLabel);
+        // If no transactions, add a message
+        if (userTransactions.isEmpty()) {
+            JLabel noTransactionsLabel = new JLabel("No recent transactions");
+            noTransactionsLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+            noTransactionsLabel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 0));
+            transactionsPanel.add(noTransactionsLabel);
+        } else {
+            // Add transactions
+            for (BankAccountClass.Transaction transaction : userTransactions) {
+                JLabel transactionLabel = new JLabel(transaction.details + ": " + transaction.amount);
+                transactionLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+                transactionLabel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 0));
+                transactionsPanel.add(transactionLabel);
+            }
         }
 
-        homePanel.add(transactionsPanel, BorderLayout.CENTER);
+        return transactionsPanel;
+    }
 
-        return homePanel;
+    private JPanel createLoadContent() {
+
+        BankAccountClass.UserAccount user = authentication.getLoggedInAccount();
+
+        JPanel loadPanel = new JPanel(null);
+        loadPanel.setBackground(Color.WHITE);
+        loadPanel.setPreferredSize(new Dimension(800, 700));
+
+        // Left Panel (White)
+        JPanel leftPanel = new JPanel(null);
+        leftPanel.setBackground(Color.WHITE);
+        leftPanel.setBounds(0, 0, 400, 700);
+
+        // Left panel components
+        JLabel titleLabel = new JLabel("Buy Load");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setBounds(40, 40, 200, 30);
+        leftPanel.add(titleLabel);
+
+        JLabel serviceProviderLabel = new JLabel("Select Service Provider:");
+        serviceProviderLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        serviceProviderLabel.setBounds(40, 90, 200, 25);
+        leftPanel.add(serviceProviderLabel);
+
+        String[] serviceProviders = {"Globe", "Smart", "TNT", "TM", "DITO"};
+        JComboBox<String> serviceProviderComboBox = new JComboBox<>(serviceProviders);
+        serviceProviderComboBox.setBounds(40, 120, 300, 35);
+        leftPanel.add(serviceProviderComboBox);
+
+        JLabel methodLabel = new JLabel("Payment Method:");
+        methodLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        methodLabel.setBounds(40, 170, 150, 25);
+        leftPanel.add(methodLabel);
+
+        String[] methods = {"Current", "Savings", "Credit"};
+        JComboBox<String> methodComboBox = new JComboBox<>(methods);
+        methodComboBox.setBounds(40, 200, 300, 35);
+        leftPanel.add(methodComboBox);
+
+        JPanel balancePanel = new JPanel();
+        balancePanel.setBackground(new Color(235,235,235));
+        balancePanel.setBounds(40, 240, 300, 50);
+        leftPanel.add(balancePanel);
+
+        JLabel amountAvail = new JLabel("Amount Available:\n");
+        amountAvail.setFont(new Font("Arial", Font.BOLD, 14));
+        amountAvail.setBounds(40, 240, 150, 25);
+        balancePanel.add(amountAvail);
+
+        JLabel balance = new JLabel("P" + user.getBalance());
+        balance.setFont(new Font("Arial", Font.BOLD, 18));
+        balance.setBounds(40, 270, 150, 25);
+        balancePanel.add(balance);
+
+        // Right Panel (Yellow)
+        JPanel rightPanel = new JPanel(null);
+        rightPanel.setBackground(new Color(244, 226, 124));
+        rightPanel.setBounds(400, 0, 400, 700);
+
+        JLabel phoneLabel = new JLabel("Buy Load for");
+        phoneLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        phoneLabel.setBounds(40, 40, 200, 30);
+        rightPanel.add(phoneLabel);
+
+        JTextField numberField = new JTextField();
+        numberField.setBounds(40, 80, 300, 35);
+        numberField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
+        rightPanel.add(numberField);
+
+        JLabel amountLabel = new JLabel("Enter Amount:");
+        amountLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        amountLabel.setBounds(40, 130, 150, 25);
+        rightPanel.add(amountLabel);
+
+        JTextField amountField = new JTextField();
+        amountField.setBounds(40, 160, 300, 35);
+        amountField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
+        rightPanel.add(amountField);
+
+        JLabel feeLabel = new JLabel("Transaction Fee: ");
+        feeLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        feeLabel.setBounds(40, 210, 150, 25);
+        rightPanel.add(feeLabel);
+
+        JLabel feeText = new JLabel("P1");
+        feeText.setFont(new Font("Arial", Font.BOLD, 14));
+        feeText.setBounds(40, 240, 150, 25);
+        rightPanel.add(feeText);
+
+        JLabel feeNote = new JLabel("<html>Note: Transaction fee varies from <br> service provider</html>\"");
+        feeNote.setFont(new Font("Arial", Font.ITALIC, 14));
+        feeNote.setBounds(40, 280, 300, 50);
+        rightPanel.add(feeNote);
+
+        JButton loadButton = new JButton("LOAD MONEY");
+        loadButton.setBounds(40, 350, 300, 40);
+        loadButton.setBackground(new Color(30, 30, 30));
+        loadButton.setForeground(Color.WHITE);
+        loadButton.setFont(new Font("Arial", Font.BOLD, 14));
+        loadButton.setOpaque(true);
+        loadButton.setBorderPainted(false);
+        loadButton.addActionListener(e -> {
+            // Create the dialog
+            JDialog pinDialog = new JDialog((Frame) null, "Enter PIN", true);
+            pinDialog.setLayout(new BorderLayout());
+            pinDialog.setBackground(Color.BLACK);
+            pinDialog.setSize(300, 150);
+            pinDialog.setLocationRelativeTo(null); // Center on screen
+
+            // Create a label for instructions
+            JLabel pinLabel = new JLabel("Enter your PIN:");
+            pinLabel.setFont(new Font("Arial", Font.BOLD, 14));
+            pinLabel.setForeground(Color.BLACK);
+            pinLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            pinDialog.add(pinLabel, BorderLayout.NORTH);
+
+            // Create a PIN input field
+            JPasswordField pinField = new JPasswordField();
+            pinField.setFont(new Font("Arial", Font.BOLD, 14));
+            pinField.setDocument(new LimitedDocument(4));
+            pinDialog.add(pinField, BorderLayout.CENTER);
+
+            // Create a button panel
+            JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            JButton confirmButton = new JButton("Confirm");
+            JButton cancelButton = new JButton("Cancel");
+
+            buttonPanel.add(cancelButton);
+            buttonPanel.add(confirmButton);
+            pinDialog.add(buttonPanel, BorderLayout.SOUTH);
+
+            // Add functionality
+            confirmButton.addActionListener(event -> {
+
+                String number = numberField.getText();
+                String amount = amountField.getText();
+                String serviceProvider = (String) serviceProviderComboBox.getSelectedItem();
+
+                String pin = new String(pinField.getPassword());
+                if (pin.isEmpty()) {
+                    JOptionPane.showMessageDialog(pinDialog, "PIN cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(pinDialog, "PIN entered: " + pin, "Success", JOptionPane.INFORMATION_MESSAGE);
+                    pinDialog.dispose();
+
+                    if (user.buyLoad(number, Double.parseDouble(amount), serviceProvider)){
+                        refreshHomeContent();
+                    }
+
+                }
+            });
+
+            cancelButton.addActionListener(event -> pinDialog.dispose()); // Close dialog
+
+            // Show the dialog
+            pinDialog.setVisible(true);
+        });
+        rightPanel.add(loadButton);
+
+        // Add panels to main panel
+        loadPanel.add(leftPanel);
+        loadPanel.add(rightPanel);
+
+        return loadPanel;
+    }
+
+    private void refreshHomeContent() {
+        mainContentCards.remove(0);
+        mainContentCards.remove(1);
+
+        JPanel homePanel = createHomeContent();
+        JPanel loadPanel = createLoadContent();
+
+        mainContentCards.add(homePanel, "home");
+        mainContentCards.add(loadPanel, "load");
+
+        mainContentCards.revalidate();
+        mainContentCards.repaint();
+
     }
 
     private JPanel createTransferPage(){
@@ -550,39 +740,39 @@ public class Application {
 
     private JPanel createloanPage() {
         BankAccountClass.UserAccount user = authentication.getLoggedInAccount();
-    
+
         JPanel loanPanel = new JPanel(null);
         loanPanel.setBackground(Color.WHITE);
         loanPanel.setPreferredSize(new Dimension(800, 700));
-    
+
         // Left Panel (White)
         JPanel leftPanel = new JPanel(null);
         leftPanel.setBackground(Color.WHITE);
         leftPanel.setBounds(0, 0, 400, 700);
-    
+
         // Title Label
         JLabel titleLabel = new JLabel("Loan Request");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setBounds(40, 40, 200, 30);
         leftPanel.add(titleLabel);
-    
+
         // Loan Amount Label
         JLabel loanLabel = new JLabel("Enter Loan Amount (₱):");
         loanLabel.setFont(new Font("Arial", Font.BOLD, 14));
         loanLabel.setBounds(40, 100, 200, 25);
         leftPanel.add(loanLabel);
-    
+
         // Loan Amount Text Field
         JTextField loanAmountField = new JTextField(15);
         loanAmountField.setBounds(40, 130, 300, 35);
         loanAmountField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
         leftPanel.add(loanAmountField);
-    
+
         // Right Panel (Yellow)
         JPanel rightPanel = new JPanel(null);
         rightPanel.setBackground(new Color(244, 226, 124));
         rightPanel.setBounds(400, 0, 400, 700);
-    
+
         // Submit Button
         JButton submitButton = new JButton("Submit Loan Request");
         submitButton.setBounds(40, 350, 300, 40);
@@ -595,71 +785,71 @@ public class Application {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String loanAmount = loanAmountField.getText();
-                
+
                 // Validate input
                 try {
                     double amount = Double.parseDouble(loanAmount);
                     if ( amount < 1000 || amount > 100000) {
-                        JOptionPane.showMessageDialog(loanPanel, 
+                        JOptionPane.showMessageDialog(loanPanel,
                             "Loan amount must be between ₱1,000 and ₱100,000.",
-                            "Invalid Input", 
+                            "Invalid Input",
                             JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-                    
+
                     // Create PIN Dialog
                     JDialog pinDialog = new JDialog((Frame) null, "Enter PIN", true);
                     pinDialog.setLayout(new BorderLayout());
                     pinDialog.setBackground(Color.WHITE);
                     pinDialog.setSize(300, 150);
                     pinDialog.setLocationRelativeTo(null);
-    
+
                     JLabel pinLabel = new JLabel("Enter your PIN to confirm loan request:");
                     pinLabel.setFont(new Font("Arial", Font.BOLD, 14));
                     pinLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
                     pinDialog.add(pinLabel, BorderLayout.NORTH);
-    
+
                     JPasswordField pinField = new JPasswordField();
                     pinField.setFont(new Font("Arial", Font.BOLD, 14));
                     pinField.setDocument(new LimitedDocument(4));
                     pinDialog.add(pinField, BorderLayout.CENTER);
-    
+
                     JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
                     JButton confirmButton = new JButton("Confirm");
                     JButton cancelButton = new JButton("Cancel");
-    
+
                     buttonPanel.add(cancelButton);
                     buttonPanel.add(confirmButton);
                     pinDialog.add(buttonPanel, BorderLayout.SOUTH);
-    
+
                     confirmButton.addActionListener(pinEvent -> {
                         String pin = new String(pinField.getPassword());
                         if (pin.isEmpty()) {
                             JOptionPane.showMessageDialog(pinDialog, "PIN cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);
                         } else {
                             // Create loan confirmation frame
-                            JOptionPane.showMessageDialog(pinDialog, 
+                            JOptionPane.showMessageDialog(pinDialog,
                                 "Your loan request for $" + amount + " has been submitted.\n" +
-                                "You will receive an email notification about the status.", 
-                                "Loan Request Submitted", 
+                                "You will receive an email notification about the status.",
+                                "Loan Request Submitted",
                                 JOptionPane.INFORMATION_MESSAGE);
                             pinDialog.dispose();
                         }
                     });
-    
+
                     cancelButton.addActionListener(pinEvent -> pinDialog.dispose());
-    
+
                     pinDialog.setVisible(true);
                 } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(loanPanel, 
-                        "Please enter a valid number.", 
-                        "Invalid Input", 
+                    JOptionPane.showMessageDialog(loanPanel,
+                        "Please enter a valid number.",
+                        "Invalid Input",
                         JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
         rightPanel.add(submitButton);
-    
+
         // Additional loan information
         JLabel infoLabel = new JLabel("<html>Loan Request Guidelines:<br>" +
             "• Minimum loan amount: ₱1,000<br>" +
@@ -669,11 +859,11 @@ public class Application {
         infoLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         infoLabel.setBounds(40, 200, 300, 150);
         rightPanel.add(infoLabel);
-    
+
         // Add panels to main panel
         loanPanel.add(leftPanel);
         loanPanel.add(rightPanel);
-    
+
         return loanPanel;
     }
 
@@ -728,7 +918,7 @@ public class Application {
 
         ImageIcon openEyeIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/notvisible.png")));
         ImageIcon closedEyeIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/visible-2.png")));
-    
+
         // Eye button to toggle password visibility
         JButton toggleButton = new JButton(closedEyeIcon);
         toggleButton.setBounds(360, 240, 30, 30);
@@ -760,7 +950,7 @@ public class Application {
         pinField.setBackground(new Color(255, 255, 255));
         pinField.setOpaque(true);
         lowerPanel.add(pinField);
-    
+
         // Eye button to toggle password visibility
         JButton toggleButton2 = new JButton(closedEyeIcon);
         toggleButton2.setBounds(360, 320, 30, 30);
@@ -795,7 +985,7 @@ public class Application {
             }
         });
         lowerPanel.add(loginButton);
-        
+
         lowerPanel.add(toggleButton);
         lowerPanel.add(nameLabel);
         lowerPanel.add(userLabel);
@@ -813,169 +1003,6 @@ public class Application {
         return profilePanel;
     }
 
-    private JPanel createLoadContent() {
-
-        BankAccountClass.UserAccount user = authentication.getLoggedInAccount();
-
-        JPanel loadPanel = new JPanel(null);
-        loadPanel.setBackground(Color.WHITE);
-        loadPanel.setPreferredSize(new Dimension(800, 700));
-
-        // Left Panel (White)
-        JPanel leftPanel = new JPanel(null);
-        leftPanel.setBackground(Color.WHITE);
-        leftPanel.setBounds(0, 0, 400, 700);
-
-        // Left panel components
-        JLabel titleLabel = new JLabel("Buy Load");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setBounds(40, 40, 200, 30);
-        leftPanel.add(titleLabel);
-
-        JLabel serviceProviderLabel = new JLabel("Select Service Provider:");
-        serviceProviderLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        serviceProviderLabel.setBounds(40, 90, 200, 25);
-        leftPanel.add(serviceProviderLabel);
-
-        String[] serviceProviders = {"Globe", "Smart", "TNT", "TM", "DITO"};
-        JComboBox<String> serviceProviderComboBox = new JComboBox<>(serviceProviders);
-        serviceProviderComboBox.setBounds(40, 120, 300, 35);
-        leftPanel.add(serviceProviderComboBox);
-
-        JLabel methodLabel = new JLabel("Payment Method:");
-        methodLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        methodLabel.setBounds(40, 170, 150, 25);
-        leftPanel.add(methodLabel);
-
-        String[] methods = {"Current", "Savings", "Credit"};
-        JComboBox<String> methodComboBox = new JComboBox<>(methods);
-        methodComboBox.setBounds(40, 200, 300, 35);
-        leftPanel.add(methodComboBox);
-
-        JPanel balancePanel = new JPanel();
-        balancePanel.setBackground(new Color(235,235,235));
-        balancePanel.setBounds(40, 240, 300, 50);
-        leftPanel.add(balancePanel);
-
-        JLabel amountAvail = new JLabel("Amount Available:\n");
-        amountAvail.setFont(new Font("Arial", Font.BOLD, 14));
-        amountAvail.setBounds(40, 240, 150, 25);
-        balancePanel.add(amountAvail);
-
-        JLabel balance = new JLabel("P" + user.getBalance());
-        balance.setFont(new Font("Arial", Font.BOLD, 18));
-        balance.setBounds(40, 270, 150, 25);
-        balancePanel.add(balance);
-
-        // Right Panel (Yellow)
-        JPanel rightPanel = new JPanel(null);
-        rightPanel.setBackground(new Color(244, 226, 124));
-        rightPanel.setBounds(400, 0, 400, 700);
-
-        JLabel phoneLabel = new JLabel("Buy Load for");
-        phoneLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        phoneLabel.setBounds(40, 40, 200, 30);
-        rightPanel.add(phoneLabel);
-
-        JTextField numberField = new JTextField();
-        numberField.setBounds(40, 80, 300, 35);
-        numberField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
-        rightPanel.add(numberField);
-
-        JLabel amountLabel = new JLabel("Enter Amount:");
-        amountLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        amountLabel.setBounds(40, 130, 150, 25);
-        rightPanel.add(amountLabel);
-
-        JTextField amountField = new JTextField();
-        amountField.setBounds(40, 160, 300, 35);
-        amountField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
-        rightPanel.add(amountField);
-
-        JLabel feeLabel = new JLabel("Transaction Fee: ");
-        feeLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        feeLabel.setBounds(40, 210, 150, 25);
-        rightPanel.add(feeLabel);
-
-        JLabel feeText = new JLabel("P");
-        feeText.setFont(new Font("Arial", Font.BOLD, 14));
-        feeText.setBounds(40, 240, 150, 25);
-        rightPanel.add(feeText);
-
-        JLabel feeNote = new JLabel("<html>Note: Transaction fee varies from <br> service provider</html>\"");
-        feeNote.setFont(new Font("Arial", Font.ITALIC, 14));
-        feeNote.setBounds(40, 280, 300, 50);
-        rightPanel.add(feeNote);
-
-        JButton loadButton = new JButton("LOAD MONEY");
-        loadButton.setBounds(40, 350, 300, 40);
-        loadButton.setBackground(new Color(30, 30, 30));
-        loadButton.setForeground(Color.WHITE);
-        loadButton.setFont(new Font("Arial", Font.BOLD, 14));
-        loadButton.setOpaque(true);
-        loadButton.setBorderPainted(false);
-        loadButton.addActionListener(e -> {
-            // Create the dialog
-            JDialog pinDialog = new JDialog((Frame) null, "Enter PIN", true);
-            pinDialog.setLayout(new BorderLayout());
-            pinDialog.setBackground(Color.BLACK);
-            pinDialog.setSize(300, 150);
-            pinDialog.setLocationRelativeTo(null); // Center on screen
-
-            // Create a label for instructions
-            JLabel pinLabel = new JLabel("Enter your PIN:");
-            pinLabel.setFont(new Font("Arial", Font.BOLD, 14));
-            pinLabel.setForeground(Color.BLACK);
-            pinLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            pinDialog.add(pinLabel, BorderLayout.NORTH);
-
-            // Create a PIN input field
-            JPasswordField pinField = new JPasswordField();
-            pinField.setFont(new Font("Arial", Font.BOLD, 14));
-            pinField.setDocument(new LimitedDocument(4));
-            pinDialog.add(pinField, BorderLayout.CENTER);
-
-            // Create a button panel
-            JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JButton confirmButton = new JButton("Confirm");
-            JButton cancelButton = new JButton("Cancel");
-
-            buttonPanel.add(cancelButton);
-            buttonPanel.add(confirmButton);
-            pinDialog.add(buttonPanel, BorderLayout.SOUTH);
-
-            // Add functionality
-            confirmButton.addActionListener(event -> {
-
-                String number = numberField.getText();
-                String amount = amountField.getText();
-                String serviceProvider = (String) serviceProviderComboBox.getSelectedItem();
-
-                String pin = new String(pinField.getPassword());
-                if (pin.isEmpty()) {
-                    JOptionPane.showMessageDialog(pinDialog, "PIN cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(pinDialog, "PIN entered: " + pin, "Success", JOptionPane.INFORMATION_MESSAGE);
-                    pinDialog.dispose();
-
-                    user.buyLoad(number, Double.parseDouble(amount), serviceProvider);
-                    balance.setText("P" + user.getBalance());
-                }
-            });
-
-            cancelButton.addActionListener(event -> pinDialog.dispose()); // Close dialog
-
-            // Show the dialog
-            pinDialog.setVisible(true);
-        });
-        rightPanel.add(loadButton);
-
-        // Add panels to main panel
-        loadPanel.add(leftPanel);
-        loadPanel.add(rightPanel);
-
-        return loadPanel;
-    }
 
     private void createRegisterPage() throws IOException, FontFormatException {
         JFrame registerFrame = new JFrame("FEU Register Page");
@@ -1183,5 +1210,12 @@ public class Application {
         passwordField.setBackground(new Color(240, 240, 240));
         passwordField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
         return passwordField;
+    }
+
+    public static String capitalizeFirstLetter(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
     }
 }

@@ -109,6 +109,8 @@ public class BankAccountClass {
             buyLoad.amount = -amount;
             buyLoad.recipient = "FEU Bank";
             buyLoad.date = java.time.LocalDate.now().toString();
+
+            this.transactions.add(buyLoad);
             return true;
 
         }
@@ -116,6 +118,9 @@ public class BankAccountClass {
 
 
         public boolean transferMoney(UserAccount recipient, double amount) {
+
+            double otherBankFee = 10;
+
             if (amount <= 0) {
                 return false;
             }
