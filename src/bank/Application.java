@@ -567,7 +567,7 @@ public class Application {
         leftPanel.add(titleLabel);
     
         // Loan Amount Label
-        JLabel loanLabel = new JLabel("Enter Loan Amount (P):");
+        JLabel loanLabel = new JLabel("Enter Loan Amount (₱):");
         loanLabel.setFont(new Font("Arial", Font.BOLD, 14));
         loanLabel.setBounds(40, 100, 200, 25);
         leftPanel.add(loanLabel);
@@ -599,9 +599,9 @@ public class Application {
                 // Validate input
                 try {
                     double amount = Double.parseDouble(loanAmount);
-                    if (amount <= 0) {
+                    if ( amount < 1000 || amount > 100000) {
                         JOptionPane.showMessageDialog(loanPanel, 
-                            "Please enter a valid loan amount.", 
+                            "Loan amount must be between ₱1,000 and ₱100,000.",
                             "Invalid Input", 
                             JOptionPane.ERROR_MESSAGE);
                         return;
@@ -662,8 +662,8 @@ public class Application {
     
         // Additional loan information
         JLabel infoLabel = new JLabel("<html>Loan Request Guidelines:<br>" +
-            "• Minimum loan amount: P1,000<br>" +
-            "• Maximum loan amount: P50,000<br>" +
+            "• Minimum loan amount: ₱1,000<br>" +
+            "• Maximum loan amount: ₱100,000<br>" +
             "• Interest rates vary based on amount and credit score<br>" +
             "• Approval subject to credit check</html>");
         infoLabel.setFont(new Font("Arial", Font.PLAIN, 12));
