@@ -599,6 +599,7 @@ public class Application {
 
                     if (user.buyLoad(number, Double.parseDouble(amount), serviceProvider)){
                         refreshPages();
+                        balance.setText("P " + user.getBalance());
                     }
 
                 }
@@ -754,6 +755,7 @@ public class Application {
 
             if (user.transferMoney(authentication.findAccountNumber(accNum),Double.parseDouble(amount))){
                 refreshPages();
+                balanceLabel.setText("P " + user.getBalance());
             }
 
         });
